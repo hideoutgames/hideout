@@ -17,6 +17,12 @@
   --text-shadow: 0 calc(var(--u) * 2 + 1px) calc(var(--u) * 30 + 8px) rgb(0 45 100 / 0.22);
   --sky: #0096ff;
 
+  /* Film grain: one static noise tile split into a negative and a positive half
+     (see "Film grain" below). Shared by the page and the project logos. */
+  --grain-neg: url("data:image/svg+xml,%3Csvg%20xmlns=%27http://www.w3.org/2000/svg%27%20width=%27320%27%20height=%27320%27%3E%3Cfilter%20id=%27n%27%20x=%270%27%20y=%270%27%20width=%27100%25%27%20height=%27100%25%27%20color-interpolation-filters=%27sRGB%27%3E%3CfeTurbulence%20type=%27fractalNoise%27%20baseFrequency=%273.1%27%20numOctaves=%271%27%20seed=%277%27%20stitchTiles=%27stitch%27/%3E%3CfeColorMatrix%20type=%27matrix%27%20values=%271%200%200%200%200%20%201%200%200%200%200%20%201%200%200%200%200%20%200%200%200%200%201%27/%3E%3CfeComponentTransfer%3E%3CfeFuncR%20type=%27table%27%20tableValues=%270.5%200%200%27/%3E%3CfeFuncG%20type=%27table%27%20tableValues=%270.5%200%200%27/%3E%3CfeFuncB%20type=%27table%27%20tableValues=%270.5%200%200%27/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect%20width=%27100%25%27%20height=%27100%25%27%20filter=%27url%28%23n%29%27/%3E%3C/svg%3E");
+  --grain-pos: url("data:image/svg+xml,%3Csvg%20xmlns=%27http://www.w3.org/2000/svg%27%20width=%27320%27%20height=%27320%27%3E%3Cfilter%20id=%27n%27%20x=%270%27%20y=%270%27%20width=%27100%25%27%20height=%27100%25%27%20color-interpolation-filters=%27sRGB%27%3E%3CfeTurbulence%20type=%27fractalNoise%27%20baseFrequency=%273.1%27%20numOctaves=%271%27%20seed=%277%27%20stitchTiles=%27stitch%27/%3E%3CfeColorMatrix%20type=%27matrix%27%20values=%271%200%200%200%200%20%201%200%200%200%200%20%201%200%200%200%200%20%200%200%200%200%201%27/%3E%3CfeComponentTransfer%3E%3CfeFuncR%20type=%27table%27%20tableValues=%270%200%200.5%27/%3E%3CfeFuncG%20type=%27table%27%20tableValues=%270%200%200.5%27/%3E%3CfeFuncB%20type=%27table%27%20tableValues=%270%200%200.5%27/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect%20width=%27100%25%27%20height=%27100%25%27%20filter=%27url%28%23n%29%27/%3E%3C/svg%3E");
+  --grain-opacity: 0.85;
+
   /* Fluid design unit: 1u == 1 CSS px on the 2560x1702 mockup.
      Scales with whichever viewport dimension is the limiting one, so the whole
      composition always fits inside 100svh on desktop. */
@@ -141,33 +147,69 @@ a {
   content: "";
   position: absolute; /* attached to the page, so it moves with scroll and overscroll */
   inset: 0;
-  z-index: 50; /* above photo, tiles and wordmark; below the text (z 60) */
+  z-index: 50; /* above photo and wordmark; below the text and glass tiles (z 60) */
   pointer-events: none;
   background-size: 320px 320px;
-  opacity: 0.85;
+  opacity: var(--grain-opacity);
 }
 
 @media (max-width: 1800px) {
-  .stage::before,
-  .stage::after {
-    opacity: 0.72; /* grain is a fixed pixel size, so ease it off on smaller screens */
+  :root {
+    --grain-opacity: 0.72; /* grain is a fixed pixel size, so ease it off on smaller screens */
   }
 }
 
-.stage::before {
-  background-image: url("data:image/svg+xml,%3Csvg%20xmlns=%27http://www.w3.org/2000/svg%27%20width=%27320%27%20height=%27320%27%3E%3Cfilter%20id=%27n%27%20x=%270%27%20y=%270%27%20width=%27100%25%27%20height=%27100%25%27%20color-interpolation-filters=%27sRGB%27%3E%3CfeTurbulence%20type=%27fractalNoise%27%20baseFrequency=%273.1%27%20numOctaves=%271%27%20seed=%277%27%20stitchTiles=%27stitch%27/%3E%3CfeColorMatrix%20type=%27matrix%27%20values=%271%200%200%200%200%20%201%200%200%200%200%20%201%200%200%200%200%20%200%200%200%200%201%27/%3E%3CfeComponentTransfer%3E%3CfeFuncR%20type=%27table%27%20tableValues=%270.5%200%200%27/%3E%3CfeFuncG%20type=%27table%27%20tableValues=%270.5%200%200%27/%3E%3CfeFuncB%20type=%27table%27%20tableValues=%270.5%200%200%27/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect%20width=%27100%25%27%20height=%27100%25%27%20filter=%27url%28%23n%29%27/%3E%3C/svg%3E");
+.stage::before,
+.mark::before {
+  background-image: var(--grain-neg);
   mix-blend-mode: difference;
 }
 
-.stage::after {
-  background-image: url("data:image/svg+xml,%3Csvg%20xmlns=%27http://www.w3.org/2000/svg%27%20width=%27320%27%20height=%27320%27%3E%3Cfilter%20id=%27n%27%20x=%270%27%20y=%270%27%20width=%27100%25%27%20height=%27100%25%27%20color-interpolation-filters=%27sRGB%27%3E%3CfeTurbulence%20type=%27fractalNoise%27%20baseFrequency=%273.1%27%20numOctaves=%271%27%20seed=%277%27%20stitchTiles=%27stitch%27/%3E%3CfeColorMatrix%20type=%27matrix%27%20values=%271%200%200%200%200%20%201%200%200%200%200%20%201%200%200%200%200%20%200%200%200%200%201%27/%3E%3CfeComponentTransfer%3E%3CfeFuncR%20type=%27table%27%20tableValues=%270%200%200.5%27/%3E%3CfeFuncG%20type=%27table%27%20tableValues=%270%200%200.5%27/%3E%3CfeFuncB%20type=%27table%27%20tableValues=%270%200%200.5%27/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect%20width=%27100%25%27%20height=%27100%25%27%20filter=%27url%28%23n%29%27/%3E%3C/svg%3E");
+.stage::after,
+.mark::after {
+  background-image: var(--grain-pos);
   mix-blend-mode: screen; /* fallback */
 }
 
 @supports (mix-blend-mode: plus-lighter) {
-  .stage::after {
+  .stage::after,
+  .mark::after {
     mix-blend-mode: plus-lighter;
   }
+}
+
+/* Logos inside the glass tiles carry their own grain: the same two noise layers,
+   masked to the logo's alpha so only the artwork is grainy, never the tile. */
+.mark {
+  position: relative;
+  display: block;
+  transition: transform 0.6s var(--ease-out);
+}
+
+.mark img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.mark::before,
+.mark::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-size: 320px 320px;
+  opacity: var(--grain-opacity);
+  -webkit-mask: var(--mark-mask) center / 100% 100% no-repeat;
+  mask: var(--mark-mask) center / 100% 100% no-repeat;
+}
+
+.mark--haptic {
+  --mark-mask: url("../img/haptic.png");
+}
+
+.mark--games {
+  --mark-mask: url("../img/hideout-games-white.png");
 }
 
 /* ---------- Page content --------------------------------------------------- */
@@ -263,12 +305,15 @@ a {
   grid-template-columns: repeat(2, calc(var(--u) * 720));
   gap: calc(var(--u) * 56);
   justify-content: center;
+  position: relative;
+  z-index: 60; /* above the page grain (z 50): the glass tiles read as objects on top */
 }
 
 .tile {
   position: relative;
   z-index: 1;
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   place-items: center;
   height: calc(var(--u) * 340);
   border-radius: calc(var(--u) * 36);
@@ -284,21 +329,14 @@ a {
   -webkit-tap-highlight-color: transparent;
 }
 
-.tile__logo {
-  display: block;
-  width: auto;
-  height: auto;
-  transition: transform 0.6s var(--ease-out);
-}
-
 /* Optical balancing: HAPTIC is wide and light, the Hideout Games mark is compact
    and dense, so the compact mark gets more height and the wide mark less. */
-.tile--haptic .tile__logo {
+.tile--haptic .mark {
   width: calc(var(--u) * 530);
 }
 
-.tile--games .tile__logo {
-  height: calc(var(--u) * 186);
+.tile--games .mark {
+  width: calc(var(--u) * 359); /* 186u tall at the logo's 361:187 ratio */
 }
 
 .tile:hover {
@@ -309,7 +347,7 @@ a {
     inset 0 1px 0 rgb(255 255 255 / 0.3);
 }
 
-.tile:hover .tile__logo {
+.tile:hover .mark {
   transform: scale(1.025);
 }
 
@@ -437,7 +475,10 @@ a {
 }
 
 .panel {
+  position: relative;
+  z-index: 60; /* above the page grain, like the project tiles */
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   place-items: center;
   width: clamp(250px, calc(var(--u) * 640), 760px);
   aspect-ratio: 16 / 9;
@@ -451,9 +492,8 @@ a {
   backdrop-filter: blur(14px) saturate(1.25);
 }
 
-.panel img {
+.panel .mark {
   width: 52%;
-  height: auto;
 }
 
 .sub__lead {
@@ -596,13 +636,12 @@ a {
     border-radius: 18px;
   }
 
-  .tile--haptic .tile__logo {
+  .tile--haptic .mark {
     width: 60%;
   }
 
-  .tile--games .tile__logo {
+  .tile--games .mark {
     width: 39%;
-    height: auto;
   }
 
   .tile:hover {
@@ -668,7 +707,7 @@ a {
   }
 
   .tile,
-  .tile__logo,
+  .mark,
   .button,
   .button svg,
   .contact span {
@@ -676,7 +715,7 @@ a {
   }
 
   .tile:hover,
-  .tile:hover .tile__logo,
+  .tile:hover .mark,
   .button:hover {
     transform: none;
   }
