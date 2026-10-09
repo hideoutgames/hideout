@@ -66,6 +66,15 @@ a {
   color: inherit;
 }
 
+/* Holder for inline SVG filter definitions: takes no space, never display:none
+   (filters inside display:none SVGs are ignored by some browsers). */
+.defs {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+}
+
 /* ---------- Stage ---------------------------------------------------------- */
 
 .stage {
@@ -159,27 +168,25 @@ a {
   }
 }
 
-.stage::before,
-.mark::before {
+.stage::before {
   background-image: var(--grain-neg);
   mix-blend-mode: difference;
 }
 
-.stage::after,
-.mark::after {
+.stage::after {
   background-image: var(--grain-pos);
   mix-blend-mode: screen; /* fallback */
 }
 
 @supports (mix-blend-mode: plus-lighter) {
-  .stage::after,
-  .mark::after {
+  .stage::after {
     mix-blend-mode: plus-lighter;
   }
 }
 
-/* Logos inside the glass tiles carry their own grain: the same two noise layers,
-   masked to the logo's alpha so only the artwork is grainy, never the tile. */
+/* Logos inside the glass tiles carry their own grain via the inline SVG filter
+   #logo-grain (in the HTML): the same noise added to the logo's colour while its
+   alpha is left untouched, so the tile stays clean and the edges get no fringe. */
 .mark {
   position: relative;
   display: block;
@@ -190,26 +197,7 @@ a {
   display: block;
   width: 100%;
   height: auto;
-}
-
-.mark::before,
-.mark::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background-size: 320px 320px;
-  opacity: var(--grain-opacity);
-  -webkit-mask: var(--mark-mask) center / 100% 100% no-repeat;
-  mask: var(--mark-mask) center / 100% 100% no-repeat;
-}
-
-.mark--haptic {
-  --mark-mask: url("../img/haptic.png");
-}
-
-.mark--games {
-  --mark-mask: url("../img/hideout-games-white.png");
+  filter: url("#logo-grain");
 }
 
 /* ---------- Page content --------------------------------------------------- */
