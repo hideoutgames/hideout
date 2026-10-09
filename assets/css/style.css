@@ -7,7 +7,7 @@
      3. .bg__glow      soft blue ellipse behind the top/centre content
      4. .page          content (heading, projects, contact, footer)
      5. .wordmark      giant cut-off HIDEOUT, white @ 50%
-     6. body::after    static SVG feTurbulence film grain (fixed, non-interactive)
+     6. .stage::after  static SVG feTurbulence film grain (scrolls with the page, non-interactive)
    ========================================================================== */
 
 :root {
@@ -134,35 +134,36 @@ a {
    Figma "noise") instead of a milky white/black overlay. Both layers share the
    same noise, so they never overlap. Not animated. */
 
-body::before,
-body::after {
+.stage::before,
+.stage::after {
   content: "";
-  position: fixed;
+  position: absolute; /* attached to the page, so it moves with scroll and overscroll */
   inset: 0;
   z-index: 50; /* above photo, tiles and wordmark; below the text (z 60) */
   pointer-events: none;
   background-size: 320px 320px;
+  opacity: 0.85;
 }
 
 @media (max-width: 1800px) {
-  body::before,
-  body::after {
-    opacity: 0.85; /* grain is a fixed pixel size, so ease it off on smaller screens */
+  .stage::before,
+  .stage::after {
+    opacity: 0.72; /* grain is a fixed pixel size, so ease it off on smaller screens */
   }
 }
 
-body::before {
+.stage::before {
   background-image: url("data:image/svg+xml,%3Csvg%20xmlns=%27http://www.w3.org/2000/svg%27%20width=%27320%27%20height=%27320%27%3E%3Cfilter%20id=%27n%27%20x=%270%27%20y=%270%27%20width=%27100%25%27%20height=%27100%25%27%20color-interpolation-filters=%27sRGB%27%3E%3CfeTurbulence%20type=%27fractalNoise%27%20baseFrequency=%273.1%27%20numOctaves=%271%27%20seed=%277%27%20stitchTiles=%27stitch%27/%3E%3CfeColorMatrix%20type=%27matrix%27%20values=%271%200%200%200%200%20%201%200%200%200%200%20%201%200%200%200%200%20%200%200%200%200%201%27/%3E%3CfeComponentTransfer%3E%3CfeFuncR%20type=%27table%27%20tableValues=%270.5%200%200%27/%3E%3CfeFuncG%20type=%27table%27%20tableValues=%270.5%200%200%27/%3E%3CfeFuncB%20type=%27table%27%20tableValues=%270.5%200%200%27/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect%20width=%27100%25%27%20height=%27100%25%27%20filter=%27url%28%23n%29%27/%3E%3C/svg%3E");
   mix-blend-mode: difference;
 }
 
-body::after {
+.stage::after {
   background-image: url("data:image/svg+xml,%3Csvg%20xmlns=%27http://www.w3.org/2000/svg%27%20width=%27320%27%20height=%27320%27%3E%3Cfilter%20id=%27n%27%20x=%270%27%20y=%270%27%20width=%27100%25%27%20height=%27100%25%27%20color-interpolation-filters=%27sRGB%27%3E%3CfeTurbulence%20type=%27fractalNoise%27%20baseFrequency=%273.1%27%20numOctaves=%271%27%20seed=%277%27%20stitchTiles=%27stitch%27/%3E%3CfeColorMatrix%20type=%27matrix%27%20values=%271%200%200%200%200%20%201%200%200%200%200%20%201%200%200%200%200%20%200%200%200%200%201%27/%3E%3CfeComponentTransfer%3E%3CfeFuncR%20type=%27table%27%20tableValues=%270%200%200.5%27/%3E%3CfeFuncG%20type=%27table%27%20tableValues=%270%200%200.5%27/%3E%3CfeFuncB%20type=%27table%27%20tableValues=%270%200%200.5%27/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect%20width=%27100%25%27%20height=%27100%25%27%20filter=%27url%28%23n%29%27/%3E%3C/svg%3E");
   mix-blend-mode: screen; /* fallback */
 }
 
 @supports (mix-blend-mode: plus-lighter) {
-  body::after {
+  .stage::after {
     mix-blend-mode: plus-lighter;
   }
 }
