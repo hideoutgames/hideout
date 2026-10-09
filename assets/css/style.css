@@ -35,7 +35,16 @@
 html {
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
-  background: #4ea4e4; /* shown for a frame before the photo paints */
+  /* Shown for a frame before the photo paints, and in any overscroll gap where
+     overscroll-behavior is unsupported; matches the sky at the top edge. */
+  background: #82bde4;
+}
+
+/* No rubber-band bounce past the page edges: the gap it reveals has no photo
+   or grain. */
+html,
+body {
+  overscroll-behavior: none;
 }
 
 body {
@@ -79,7 +88,7 @@ a {
   inset: 0;
   z-index: -1;
   overflow: hidden;
-  background: #4ea4e4;
+  background: #82bde4;
 }
 
 /* The only thing that moves: one very slow, one-shot settle (transform only). */
