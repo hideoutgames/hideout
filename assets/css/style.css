@@ -13,6 +13,8 @@
 :root {
   --ink-light: #f8fafc;
   --ink-dark: #2b2b2b;
+  /* Soft, diffuse, blue-tinted glow that lifts white text off bright clouds. Not a drop shadow. */
+  --text-shadow: 0 calc(var(--u) * 2 + 1px) calc(var(--u) * 30 + 8px) rgb(0 45 100 / 0.22);
   --sky: #0096ff;
 
   /* Fluid design unit: 1u == 1 CSS px on the 2560x1702 mockup.
@@ -184,6 +186,7 @@ body::after {
 .footer {
   position: relative;
   z-index: 60; /* text sits above the grain overlay (z 50) so it stays crisp */
+  text-shadow: var(--text-shadow);
 }
 
 .title {
@@ -196,9 +199,9 @@ body::after {
 }
 
 .made {
-  margin: calc(var(--u) * 30) 0 0;
+  margin: calc(var(--u) * 12) 0 0;
   font-weight: 400;
-  font-size: clamp(19px, calc(var(--u) * 66), 150px);
+  font-size: clamp(17px, calc(var(--u) * 51), 120px);
   line-height: 1.2;
   color: var(--ink-light);
   display: inline-flex;
@@ -233,7 +236,7 @@ body::after {
   font-weight: 700;
   font-size: clamp(22px, calc(var(--u) * 64), 150px);
   line-height: 1.1;
-  color: var(--ink-dark);
+  color: var(--ink-light);
 }
 
 .tiles {
@@ -303,17 +306,17 @@ body::after {
 /* ---------- Contact --------------------------------------------------------- */
 
 .contact {
-  margin-top: calc(var(--u) * 246);
+  margin-top: calc(var(--u) * 268);
   display: inline-block;
-  padding: calc(var(--u) * 10) calc(var(--u) * 72);
+  padding: calc(var(--u) * 8) calc(var(--u) * 60);
   font-weight: 500;
-  font-size: clamp(15px, calc(var(--u) * 36), 80px);
+  font-size: clamp(14px, calc(var(--u) * 30), 70px);
   line-height: 1.35;
   color: #fff;
   text-decoration: none;
   white-space: nowrap;
-  /* black @ 50%, fading to transparent at both edges */
-  background: linear-gradient(to right, rgb(0 0 0 / 0), rgb(0 0 0 / 0.5) 50%, rgb(0 0 0 / 0));
+  /* black @ ~24%, fading to transparent at both edges */
+  background: linear-gradient(to right, rgb(0 0 0 / 0), rgb(0 0 0 / 0.24) 50%, rgb(0 0 0 / 0));
   transition: opacity 0.3s var(--ease-soft);
 }
 
@@ -335,14 +338,14 @@ body::after {
 /* ---------- Footer + giant wordmark ---------------------------------------- */
 
 .footer {
-  margin-top: auto;
+  /* sits directly under the contact pill; the spare room falls below it, above the wordmark */
+  margin-top: calc(var(--u) * 14);
   padding: calc(var(--u) * 6) 24px calc(var(--wm-vis) + 6px);
   text-align: center;
   font-size: clamp(11px, calc(var(--u) * 19), 22px);
   line-height: 1.4;
   color: var(--ink-light);
-  opacity: 0.88;
-  text-shadow: 0 1px 8px rgb(0 50 110 / 0.55);
+  opacity: 0.9;
   text-wrap: balance;
 }
 
@@ -445,7 +448,7 @@ body::after {
   line-height: 1.4;
   font-weight: 500;
   color: var(--ink-light);
-  text-shadow: 0 1px 14px rgb(0 60 130 / 0.5);
+  text-shadow: var(--text-shadow);
   text-wrap: balance;
 }
 
@@ -498,7 +501,7 @@ body::after {
   text-decoration: none;
   opacity: 0.92;
   border-radius: 6px;
-  text-shadow: 0 1px 8px rgb(0 50 110 / 0.4);
+  text-shadow: var(--text-shadow);
   transition: opacity 0.3s var(--ease-soft);
 }
 
@@ -540,8 +543,8 @@ body::after {
   }
 
   .made {
-    margin-top: 0.7em;
-    font-size: clamp(20px, 5.8vw, 40px);
+    margin-top: 0.35em;
+    font-size: clamp(17px, 4.6vw, 32px);
   }
 
   .projects {
@@ -581,13 +584,14 @@ body::after {
 
   .contact {
     margin-top: clamp(28px, 5svh, 64px);
-    padding: 12px 56px;
-    font-size: clamp(15px, 4.2vw, 24px);
+    padding: 9px 46px;
+    font-size: clamp(14px, 3.6vw, 20px);
   }
 
   .footer {
     font-size: 11.5px;
-    padding: 22px 24px 80px;
+    margin-top: 10px;
+    padding: 0 24px 80px;
     max-width: 420px;
     align-self: center;
   }

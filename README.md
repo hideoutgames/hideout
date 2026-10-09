@@ -1,6 +1,6 @@
 # Hideout
 
-One-page static website for **Hideout** (Norway). Plain HTML, CSS and a few lines of JS — no build step.
+One-page static website for **Hideout** (HAPTIC and Hideout Games), made in Norway by Bru Development ENK. Plain HTML, CSS and a few lines of JS — no build step.
 
 ```
 index.html            main page
