@@ -567,25 +567,25 @@ body::after {
   }
 
   .tiles {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: minmax(0, 1fr);
     margin-top: 16px;
     gap: 12px;
     width: 100%;
-    max-width: 420px;
+    max-width: 320px;
   }
 
   .tile {
     height: auto;
-    aspect-ratio: 4 / 3;
+    aspect-ratio: 8 / 3;
     border-radius: 18px;
   }
 
   .tile--haptic .tile__logo {
-    width: 78%;
+    width: 60%;
   }
 
   .tile--games .tile__logo {
-    width: 54%;
+    width: 39%;
     height: auto;
   }
 
