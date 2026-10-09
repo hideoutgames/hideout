@@ -530,51 +530,62 @@ body::after {
     --u: min(calc(100vw / 1000), calc(100svh / 1700));
   }
 
+  /* Giant wordmark spans the whole viewport (bleeding slightly off both edges)
+     so the full word reads as a cut-off HIDEOUT, not a fragment. */
   .stage {
     min-height: 100svh;
+    --wm-w: 112vw;
   }
 
+  /* Three-part composition that fills the screen:
+       header (title + made in)  /  projects (visual centre)  /  contact + footer
+     Header and projects stay together in the upper half (as on desktop); the
+     contact's `margin-top: auto` sends any spare height to the grass above the
+     contact pair, which stays right above the wordmark. On short screens the gap
+     collapses to its minimum and the page simply scrolls. */
   .page {
-    padding-top: clamp(44px, 9svh, 100px);
+    padding: calc(env(safe-area-inset-top, 0px) + clamp(40px, 12svh, 120px))
+      max(20px, env(safe-area-inset-right, 0px)) 0 max(20px, env(safe-area-inset-left, 0px));
   }
 
   .title {
-    font-size: clamp(56px, 19vw, 150px);
+    font-size: clamp(48px, 16vw, 76px);
   }
 
   .made {
-    margin-top: 0.35em;
-    font-size: clamp(17px, 4.6vw, 32px);
+    margin-top: 0.3em;
+    font-size: clamp(15px, 4.2vw, 20px);
   }
 
   .projects {
-    margin-top: clamp(36px, 6svh, 80px);
+    margin-top: clamp(16px, 5svh, 56px);
+    padding: 32px 0 22px;
   }
 
   .projects__title {
-    font-size: clamp(24px, 6.4vw, 48px);
+    font-size: clamp(19px, 5.4vw, 24px);
   }
 
   .tiles {
-    grid-template-columns: min(100%, 400px);
-    margin-top: 22px;
-    gap: 16px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    margin-top: 16px;
+    gap: 12px;
     width: 100%;
-    max-width: 400px;
+    max-width: 420px;
   }
 
   .tile {
     height: auto;
-    aspect-ratio: 5 / 2;
-    border-radius: 22px;
+    aspect-ratio: 4 / 3;
+    border-radius: 18px;
   }
 
   .tile--haptic .tile__logo {
-    width: 62%;
+    width: 78%;
   }
 
   .tile--games .tile__logo {
-    width: 38%;
+    width: 54%;
     height: auto;
   }
 
@@ -583,36 +594,44 @@ body::after {
   }
 
   .contact {
-    margin-top: clamp(28px, 5svh, 64px);
-    padding: 9px 46px;
-    font-size: clamp(14px, 3.6vw, 20px);
+    margin-top: auto;
+    padding: 8px 40px;
+    font-size: clamp(14px, 3.7vw, 16px);
   }
 
   .footer {
-    font-size: 11.5px;
-    margin-top: 10px;
-    padding: 0 24px 80px;
-    max-width: 420px;
+    font-size: 11px;
+    line-height: 1.45;
+    margin-top: 6px;
+    padding: 0 0 calc(var(--wm-vis) + 16px);
+    max-width: 320px;
     align-self: center;
   }
 
+  /* Games page */
+  .sub {
+    padding-top: 16px;
+    padding-bottom: 20px;
+  }
+
   .panel {
-    width: min(100% - 48px, 340px);
+    width: min(100% - 8px, 340px);
   }
 
   .sub__lead {
-    font-size: clamp(16px, 4.4vw, 22px);
-    margin-top: 26px;
+    font-size: clamp(16px, 4.3vw, 20px);
+    margin-top: 24px;
+    max-width: 22em;
   }
 
   .button {
-    margin-top: 28px;
-    font-size: clamp(16px, 4.4vw, 22px);
+    margin-top: 24px;
+    font-size: clamp(15px, 4.2vw, 18px);
   }
 
   .back {
-    margin-top: 22px;
-    font-size: 15px;
+    margin-top: 18px;
+    font-size: 14px;
   }
 }
 
