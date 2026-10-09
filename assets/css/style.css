@@ -310,8 +310,6 @@ a {
   border: 1px solid rgb(255 255 255 / 0.34);
   box-shadow: 0 calc(var(--u) * 24) calc(var(--u) * 60) rgb(8 52 100 / 0.18),
     inset 0 1px 0 rgb(255 255 255 / 0.22);
-  -webkit-backdrop-filter: blur(14px) saturate(1.25);
-  backdrop-filter: blur(14px) saturate(1.25);
   text-decoration: none;
   transition: transform 0.5s var(--ease-out), background-color 0.4s var(--ease-soft),
     border-color 0.4s var(--ease-soft), box-shadow 0.5s var(--ease-out);
@@ -477,8 +475,6 @@ a {
   border: 1px solid rgb(255 255 255 / 0.34);
   box-shadow: 0 calc(var(--u) * 24) calc(var(--u) * 60) rgb(8 52 100 / 0.18),
     inset 0 1px 0 rgb(255 255 255 / 0.22);
-  -webkit-backdrop-filter: blur(14px) saturate(1.25);
-  backdrop-filter: blur(14px) saturate(1.25);
 }
 
 .panel .mark {
