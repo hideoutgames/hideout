@@ -1,0 +1,644 @@
+/* ==========================================================================
+   Hideout — one-page site
+   --------------------------------------------------------------------------
+   Layer stack (bottom -> top):
+     1. .bg__photo     sky + corn-field photo (object-fit: cover, anchored bottom)
+     2. .bg__tint      white -> #0096ff vertical gradient @ 50%  (colour grade)
+     3. .bg__glow      soft blue ellipse behind the top/centre content
+     4. .page          content (heading, projects, contact, footer)
+     5. .wordmark      giant cut-off HIDEOUT, white @ 50%
+     6. body::after    static SVG feTurbulence film grain (fixed, non-interactive)
+   ========================================================================== */
+
+:root {
+  --ink-light: #f8fafc;
+  --ink-dark: #2b2b2b;
+  --sky: #0096ff;
+
+  /* Fluid design unit: 1u == 1 CSS px on the 2560x1702 mockup.
+     Scales with whichever viewport dimension is the limiting one, so the whole
+     composition always fits inside 100svh on desktop. */
+  --u: min(calc(100vw / 2560), calc(100svh / 1702));
+
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-soft: cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  background: #4ea4e4; /* shown for a frame before the photo paints */
+}
+
+body {
+  margin: 0;
+  font-family: "Onest", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-weight: 400;
+  color: var(--ink-light);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+img,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+a {
+  color: inherit;
+}
+
+/* ---------- Stage ---------------------------------------------------------- */
+
+.stage {
+  position: relative;
+  min-height: 100vh;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  --wm-w: max(100vw, 900px);
+  --wm-h: calc(var(--wm-w) * 0.0797);
+  --wm-vis: min(var(--wm-h), calc(var(--u) * 204));
+}
+
+/* ---------- Background / colour grade ------------------------------------- */
+
+.bg {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  background: #4ea4e4;
+}
+
+/* The only thing that moves: one very slow, one-shot settle (transform only). */
+.bg__zoom {
+  position: absolute;
+  inset: 0;
+  transform-origin: 50% 100%;
+  animation: bg-settle 3.2s var(--ease-out) both;
+}
+
+.bg__photo,
+.bg__photo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.bg__photo img {
+  max-width: none;
+  object-fit: cover;
+  object-position: 50% 100%;
+}
+
+/* Colour grade: white (top) -> sky blue (bottom), 50% opacity, normal blend.
+   Exactly reproduces the mockup's gradient overlay. */
+.bg__tint {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, #ffffff 0%, var(--sky) 100%);
+  opacity: 0.5;
+}
+
+/* Soft blue glow behind the heading / projects. Sized to the mockup
+   (2264 x 1275 on a 2560-wide page, top offset -280px). */
+.bg__glow {
+  --gw: max(88.4375vw, 125svh);
+  position: absolute;
+  left: 50%;
+  top: calc(var(--gw) * -0.1237);
+  width: var(--gw);
+  aspect-ratio: 2264 / 1275;
+  translate: -50% 0;
+  background: url("../img/glow.webp") center / 100% 100% no-repeat;
+  pointer-events: none;
+}
+
+/* ---------- Film grain (static, generated in the browser) ------------------
+   One SVG feTurbulence tile, rendered by the browser (never a baked image), split
+   into a "positive" and a "negative" half. The negative half is subtracted with
+   mix-blend-mode: difference, the positive half is added with plus-lighter, so the
+   grain is a symmetric, mean-preserving additive noise (like a real film grain /
+   Figma "noise") instead of a milky white/black overlay. Both layers share the
+   same noise, so they never overlap. Not animated. */
+
+body::before,
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 50; /* above photo, tiles and wordmark; below the text (z 60) */
+  pointer-events: none;
+  background-size: 320px 320px;
+}
+
+@media (max-width: 1800px) {
+  body::before,
+  body::after {
+    opacity: 0.85; /* grain is a fixed pixel size, so ease it off on smaller screens */
+  }
+}
+
+body::before {
+  background-image: url("data:image/svg+xml,%3Csvg%20xmlns=%27http://www.w3.org/2000/svg%27%20width=%27320%27%20height=%27320%27%3E%3Cfilter%20id=%27n%27%20x=%270%27%20y=%270%27%20width=%27100%25%27%20height=%27100%25%27%20color-interpolation-filters=%27sRGB%27%3E%3CfeTurbulence%20type=%27fractalNoise%27%20baseFrequency=%273.1%27%20numOctaves=%271%27%20seed=%277%27%20stitchTiles=%27stitch%27/%3E%3CfeColorMatrix%20type=%27matrix%27%20values=%271%200%200%200%200%20%201%200%200%200%200%20%201%200%200%200%200%20%200%200%200%200%201%27/%3E%3CfeComponentTransfer%3E%3CfeFuncR%20type=%27table%27%20tableValues=%270.5%200%200%27/%3E%3CfeFuncG%20type=%27table%27%20tableValues=%270.5%200%200%27/%3E%3CfeFuncB%20type=%27table%27%20tableValues=%270.5%200%200%27/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect%20width=%27100%25%27%20height=%27100%25%27%20filter=%27url%28%23n%29%27/%3E%3C/svg%3E");
+  mix-blend-mode: difference;
+}
+
+body::after {
+  background-image: url("data:image/svg+xml,%3Csvg%20xmlns=%27http://www.w3.org/2000/svg%27%20width=%27320%27%20height=%27320%27%3E%3Cfilter%20id=%27n%27%20x=%270%27%20y=%270%27%20width=%27100%25%27%20height=%27100%25%27%20color-interpolation-filters=%27sRGB%27%3E%3CfeTurbulence%20type=%27fractalNoise%27%20baseFrequency=%273.1%27%20numOctaves=%271%27%20seed=%277%27%20stitchTiles=%27stitch%27/%3E%3CfeColorMatrix%20type=%27matrix%27%20values=%271%200%200%200%200%20%201%200%200%200%200%20%201%200%200%200%200%20%200%200%200%200%201%27/%3E%3CfeComponentTransfer%3E%3CfeFuncR%20type=%27table%27%20tableValues=%270%200%200.5%27/%3E%3CfeFuncG%20type=%27table%27%20tableValues=%270%200%200.5%27/%3E%3CfeFuncB%20type=%27table%27%20tableValues=%270%200%200.5%27/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect%20width=%27100%25%27%20height=%27100%25%27%20filter=%27url%28%23n%29%27/%3E%3C/svg%3E");
+  mix-blend-mode: screen; /* fallback */
+}
+
+@supports (mix-blend-mode: plus-lighter) {
+  body::after {
+    mix-blend-mode: plus-lighter;
+  }
+}
+
+/* ---------- Page content --------------------------------------------------- */
+
+.page {
+  position: relative;
+  flex: 1 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: calc(var(--u) * 239) 24px 0;
+}
+
+.title,
+.made,
+.projects__title,
+.contact,
+.footer {
+  position: relative;
+  z-index: 60; /* text sits above the grain overlay (z 50) so it stays crisp */
+}
+
+.title {
+  margin: 0;
+  font-weight: 700;
+  font-size: clamp(52px, calc(var(--u) * 158), 360px);
+  line-height: 1;
+  letter-spacing: 0.008em;
+  color: var(--ink-light);
+}
+
+.made {
+  margin: calc(var(--u) * 30) 0 0;
+  font-weight: 400;
+  font-size: clamp(19px, calc(var(--u) * 66), 150px);
+  line-height: 1.2;
+  color: var(--ink-light);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.28em;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.flag {
+  display: inline-block;
+  width: 1.1em; /* 22:16 */
+  height: 0.8em;
+  border-radius: 0.07em;
+  box-shadow: 0 0 0 1px rgb(255 255 255 / 0.25), 0 0.06em 0.2em rgb(0 40 90 / 0.25);
+  flex: none;
+  translate: 0 0.04em;
+}
+
+/* ---------- Projects -------------------------------------------------------- */
+
+.projects {
+  margin-top: calc(var(--u) * 158);
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.projects__title {
+  margin: 0;
+  font-weight: 700;
+  font-size: clamp(22px, calc(var(--u) * 64), 150px);
+  line-height: 1.1;
+  color: var(--ink-dark);
+}
+
+.tiles {
+  list-style: none;
+  margin: calc(var(--u) * 40) 0 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(2, calc(var(--u) * 720));
+  gap: calc(var(--u) * 56);
+  justify-content: center;
+}
+
+.tile {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  height: calc(var(--u) * 340);
+  border-radius: calc(var(--u) * 36);
+  background: linear-gradient(180deg, rgb(40 120 205 / 0.34), rgb(0 62 140 / 0.42));
+  border: 1px solid rgb(255 255 255 / 0.34);
+  box-shadow: 0 calc(var(--u) * 24) calc(var(--u) * 60) rgb(8 52 100 / 0.18),
+    inset 0 1px 0 rgb(255 255 255 / 0.22);
+  -webkit-backdrop-filter: blur(14px) saturate(1.25);
+  backdrop-filter: blur(14px) saturate(1.25);
+  text-decoration: none;
+  transition: transform 0.5s var(--ease-out), background-color 0.4s var(--ease-soft),
+    border-color 0.4s var(--ease-soft), box-shadow 0.5s var(--ease-out);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.tile__logo {
+  display: block;
+  width: auto;
+  height: auto;
+  transition: transform 0.6s var(--ease-out);
+}
+
+/* Optical balancing: HAPTIC is wide and light, the Hideout Games mark is compact
+   and dense, so the compact mark gets more height and the wide mark less. */
+.tile--haptic .tile__logo {
+  width: calc(var(--u) * 530);
+}
+
+.tile--games .tile__logo {
+  height: calc(var(--u) * 186);
+}
+
+.tile:hover {
+  transform: translateY(calc(var(--u) * -6));
+  background: linear-gradient(180deg, rgb(50 135 220 / 0.42), rgb(0 70 155 / 0.5));
+  border-color: rgb(255 255 255 / 0.55);
+  box-shadow: 0 calc(var(--u) * 34) calc(var(--u) * 70) rgb(8 52 100 / 0.24),
+    inset 0 1px 0 rgb(255 255 255 / 0.3);
+}
+
+.tile:hover .tile__logo {
+  transform: scale(1.025);
+}
+
+.tile:focus-visible {
+  outline: 3px solid #fff;
+  outline-offset: 5px;
+  box-shadow: 0 0 0 8px rgb(0 60 130 / 0.45), 0 calc(var(--u) * 34) calc(var(--u) * 70) rgb(8 52 100 / 0.24);
+}
+
+/* ---------- Contact --------------------------------------------------------- */
+
+.contact {
+  margin-top: calc(var(--u) * 246);
+  display: inline-block;
+  padding: calc(var(--u) * 10) calc(var(--u) * 72);
+  font-weight: 500;
+  font-size: clamp(15px, calc(var(--u) * 36), 80px);
+  line-height: 1.35;
+  color: #fff;
+  text-decoration: none;
+  white-space: nowrap;
+  /* black @ 50%, fading to transparent at both edges */
+  background: linear-gradient(to right, rgb(0 0 0 / 0), rgb(0 0 0 / 0.5) 50%, rgb(0 0 0 / 0));
+  transition: opacity 0.3s var(--ease-soft);
+}
+
+.contact span {
+  background: linear-gradient(currentColor, currentColor) 0 100% / 0 1px no-repeat;
+  transition: background-size 0.4s var(--ease-out);
+}
+
+.contact:hover span,
+.contact:focus-visible span {
+  background-size: 100% 1px;
+}
+
+.contact:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 4px;
+}
+
+/* ---------- Footer + giant wordmark ---------------------------------------- */
+
+.footer {
+  margin-top: auto;
+  padding: calc(var(--u) * 6) 24px calc(var(--wm-vis) + 6px);
+  text-align: center;
+  font-size: clamp(11px, calc(var(--u) * 19), 22px);
+  line-height: 1.4;
+  color: var(--ink-light);
+  opacity: 0.88;
+  text-shadow: 0 1px 8px rgb(0 50 110 / 0.55);
+  text-wrap: balance;
+}
+
+.footer p {
+  margin: 0;
+}
+
+.wordmark {
+  position: absolute;
+  z-index: 0;
+  left: 50%;
+  bottom: calc(var(--wm-vis) - var(--wm-h));
+  width: var(--wm-w);
+  translate: -50% 0;
+  pointer-events: none;
+  user-select: none;
+  animation: wordmark-rise 1.6s 0.55s var(--ease-out) both;
+}
+
+.wordmark img {
+  width: 100%;
+  height: auto;
+  max-width: none;
+}
+
+/* ---------- Entrance animation (opacity + transform only) ------------------ */
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translate3d(0, calc(var(--u) * 28 + 6px), 0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes wordmark-rise {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 38%, 0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes bg-settle {
+  from {
+    transform: scale(1.07);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+.reveal {
+  animation: rise 1s var(--ease-out) both;
+  animation-delay: calc(var(--i, 0) * 120ms + 120ms);
+}
+
+/* ---------- Sub pages (games placeholder) ---------------------------------- */
+
+.sub {
+  flex: 1 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 0 0;
+}
+
+.panel {
+  display: grid;
+  place-items: center;
+  width: clamp(250px, calc(var(--u) * 640), 760px);
+  aspect-ratio: 16 / 9;
+  margin: 0;
+  border-radius: calc(var(--u) * 40 + 6px);
+  background: linear-gradient(180deg, rgb(40 120 205 / 0.34), rgb(0 62 140 / 0.42));
+  border: 1px solid rgb(255 255 255 / 0.34);
+  box-shadow: 0 calc(var(--u) * 24) calc(var(--u) * 60) rgb(8 52 100 / 0.18),
+    inset 0 1px 0 rgb(255 255 255 / 0.22);
+  -webkit-backdrop-filter: blur(14px) saturate(1.25);
+  backdrop-filter: blur(14px) saturate(1.25);
+}
+
+.panel img {
+  width: 52%;
+  height: auto;
+}
+
+.sub__lead {
+  margin: calc(var(--u) * 56 + 8px) 24px 0;
+  max-width: 26em;
+  text-align: center;
+  font-size: clamp(17px, calc(var(--u) * 46), 90px);
+  line-height: 1.4;
+  font-weight: 500;
+  color: var(--ink-light);
+  text-shadow: 0 1px 14px rgb(0 60 130 / 0.5);
+  text-wrap: balance;
+}
+
+.button {
+  margin-top: calc(var(--u) * 60 + 8px);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6em;
+  padding: 0.85em 1.5em;
+  font-weight: 600;
+  font-size: clamp(16px, calc(var(--u) * 38), 70px);
+  line-height: 1.2;
+  color: var(--ink-dark);
+  text-decoration: none;
+  background: rgb(255 255 255 / 0.92);
+  border-radius: 999px;
+  box-shadow: 0 calc(var(--u) * 18) calc(var(--u) * 50) rgb(8 52 100 / 0.22);
+  transition: transform 0.5s var(--ease-out), background-color 0.3s var(--ease-soft),
+    box-shadow 0.5s var(--ease-out);
+}
+
+.button:hover {
+  transform: translateY(-2px);
+  background: #fff;
+}
+
+.button:focus-visible {
+  outline: 3px solid #fff;
+  outline-offset: 4px;
+  box-shadow: 0 0 0 8px rgb(0 60 130 / 0.45);
+}
+
+.button svg {
+  width: 0.9em;
+  height: 0.9em;
+  transition: transform 0.4s var(--ease-out);
+}
+
+.button:hover svg {
+  transform: translateX(3px);
+}
+
+.back {
+  margin-top: calc(var(--u) * 48 + 6px);
+  display: inline-block;
+  padding: 0.4em 0.3em;
+  font-size: clamp(14px, calc(var(--u) * 30), 56px);
+  font-weight: 500;
+  color: var(--ink-light);
+  text-decoration: none;
+  opacity: 0.92;
+  border-radius: 6px;
+  text-shadow: 0 1px 8px rgb(0 50 110 / 0.4);
+  transition: opacity 0.3s var(--ease-soft);
+}
+
+.back:hover {
+  opacity: 1;
+  text-decoration: underline;
+  text-underline-offset: 0.25em;
+}
+
+.back:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 4px;
+}
+
+.sub__lead,
+.button,
+.back {
+  position: relative;
+  z-index: 60;
+}
+
+/* ---------- Small / portrait screens --------------------------------------- */
+
+@media (max-width: 760px), (max-aspect-ratio: 4/5) {
+  :root {
+    --u: min(calc(100vw / 1000), calc(100svh / 1700));
+  }
+
+  .stage {
+    min-height: 100svh;
+  }
+
+  .page {
+    padding-top: clamp(44px, 9svh, 100px);
+  }
+
+  .title {
+    font-size: clamp(56px, 19vw, 150px);
+  }
+
+  .made {
+    margin-top: 0.7em;
+    font-size: clamp(20px, 5.8vw, 40px);
+  }
+
+  .projects {
+    margin-top: clamp(36px, 6svh, 80px);
+  }
+
+  .projects__title {
+    font-size: clamp(24px, 6.4vw, 48px);
+  }
+
+  .tiles {
+    grid-template-columns: min(100%, 400px);
+    margin-top: 22px;
+    gap: 16px;
+    width: 100%;
+    max-width: 400px;
+  }
+
+  .tile {
+    height: auto;
+    aspect-ratio: 5 / 2;
+    border-radius: 22px;
+  }
+
+  .tile--haptic .tile__logo {
+    width: 62%;
+  }
+
+  .tile--games .tile__logo {
+    width: 38%;
+    height: auto;
+  }
+
+  .tile:hover {
+    transform: none;
+  }
+
+  .contact {
+    margin-top: clamp(28px, 5svh, 64px);
+    padding: 12px 56px;
+    font-size: clamp(15px, 4.2vw, 24px);
+  }
+
+  .footer {
+    font-size: 11.5px;
+    padding: 22px 24px 80px;
+    max-width: 420px;
+    align-self: center;
+  }
+
+  .panel {
+    width: min(100% - 48px, 340px);
+  }
+
+  .sub__lead {
+    font-size: clamp(16px, 4.4vw, 22px);
+    margin-top: 26px;
+  }
+
+  .button {
+    margin-top: 28px;
+    font-size: clamp(16px, 4.4vw, 22px);
+  }
+
+  .back {
+    margin-top: 22px;
+    font-size: 15px;
+  }
+}
+
+/* Short landscape screens (e.g. phones on their side): let it scroll naturally */
+@media (max-height: 520px) and (orientation: landscape) {
+  .page {
+    padding-top: 40px;
+  }
+}
+
+/* ---------- Reduced motion -------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .bg__zoom,
+  .wordmark,
+  .reveal {
+    animation: none !important;
+  }
+
+  .tile,
+  .tile__logo,
+  .button,
+  .button svg,
+  .contact span {
+    transition: none !important;
+  }
+
+  .tile:hover,
+  .tile:hover .tile__logo,
+  .button:hover {
+    transform: none;
+  }
+}

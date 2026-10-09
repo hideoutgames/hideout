@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Hideout — Made in Norway</title>
+  <meta name="description" content="Hideout is a Norwegian company behind HAPTIC and Hideout Games. Made in Norway.">
+  <meta name="theme-color" content="#4ea4e4">
+  <meta name="color-scheme" content="light">
+
+  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Hideout">
+  <meta property="og:title" content="Hideout — Made in Norway">
+  <meta property="og:description" content="Hideout is a Norwegian company behind HAPTIC and Hideout Games.">
+  <meta property="og:url" content="https://hideout.no/">
+  <meta property="og:image" content="https://hideout.no/assets/img/og.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+  <div class="stage">
+    <div class="bg" aria-hidden="true">
+      <div class="bg__zoom">
+        <picture class="bg__photo">
+          <source type="image/webp" srcset="assets/img/field-1440.webp 1440w, assets/img/field-2560.webp 2560w" sizes="100vw">
+          <img src="assets/img/field-2560.jpg" srcset="assets/img/field-1440.jpg 1440w, assets/img/field-2560.jpg 2560w" sizes="100vw" width="2560" height="1702" alt="" decoding="async" fetchpriority="high">
+        </picture>
+        <div class="bg__tint"></div>
+      </div>
+      <div class="bg__glow"></div>
+    </div>
+
+    <main class="page">
+      <h1 class="title reveal" style="--i:0">HIDEOUT</h1>
+      <p class="made reveal" style="--i:1">
+        <span>Made in</span>
+        <svg class="flag" viewBox="0 0 22 16" role="img" aria-label="Norwegian flag" focusable="false">
+          <rect width="22" height="16" fill="#BA0C2F"/>
+          <path d="M6 0h4v16H6zM0 6h22v4H0z" fill="#fff"/>
+          <path d="M7 0h2v16H7zM0 7h22v2H0z" fill="#00205B"/>
+        </svg>
+        <span>Norway</span>
+      </p>
+
+      <section class="projects" aria-labelledby="projects-title">
+        <h2 class="projects__title reveal" style="--i:2" id="projects-title">Projects</h2>
+        <ul class="tiles reveal" style="--i:3">
+          <li>
+            <a class="tile tile--haptic" href="https://haptic.no" rel="noopener" aria-label="HAPTIC — haptic.no">
+              <img class="tile__logo" src="assets/img/haptic.png" width="800" height="185" alt="HAPTIC logo" decoding="async">
+            </a>
+          </li>
+          <li>
+            <a class="tile tile--games" href="games/" aria-label="Hideout Games — project page">
+              <img class="tile__logo" src="assets/img/hideout-games-white.png" width="361" height="187" alt="Hideout Games logo" decoding="async">
+            </a>
+          </li>
+        </ul>
+      </section>
+
+      <a class="contact reveal" style="--i:4" href="mailto:mail@hideout.no"><span>contact mail@hideout.no</span></a>
+
+      <footer class="footer reveal" style="--i:5">
+        <p>© <span id="year">2026</span> Hideout. HIDEOUT™, HIDEOUT GAMES™ and HAPTIC™ are trademarks of Hideout.</p>
+      </footer>
+    </main>
+
+    <div class="wordmark" aria-hidden="true">
+      <img src="assets/img/hideout-wordmark-cut.png" width="2560" height="204" alt="" decoding="async">
+    </div>
+  </div>
+
+  <script src="assets/js/main.js" defer></script>
+</body>
+</html>
