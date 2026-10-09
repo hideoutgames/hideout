@@ -236,9 +236,9 @@ a {
 .title .tm {
   position: absolute;
   left: 100%;
-  top: 0.5em; /* measured: puts the top of the ™ glyph level with the top of the T */
+  top: 0.143em; /* measured: puts the top of the ™ glyph level with the top of the T */
   margin-left: 0.06em;
-  font-size: 0.2em;
+  font-size: 0.47em;
   font-weight: 500;
   line-height: 1;
   letter-spacing: 0;
