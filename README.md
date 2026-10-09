@@ -20,8 +20,7 @@ python3 -m http.server 8000   # then open http://localhost:8000
 ## Deploy on GitHub Pages
 
 1. Push to GitHub.
-2. **Settings → Pages → Build and deployment → Deploy from a branch**.
-3. Choose branch **main** and folder **/ (root)**, then save.
+2. **Settings → Pages → Build and deployment → Source: GitHub Actions**. The workflow in `.github/workflows/pages.yml` deploys every push to `main`.
 
 All links and assets are relative, so the site also works from a project sub-path
 (`https://<user>.github.io/hideout/`) before a custom domain is attached.
