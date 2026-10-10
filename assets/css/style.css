@@ -13,8 +13,10 @@
 :root {
   --ink-light: #f8fafc;
   --ink-dark: #2b2b2b;
-  /* Soft, diffuse, blue-tinted glow that lifts white text off bright clouds. Not a drop shadow. */
-  --text-shadow: 0 calc(var(--u) * 2 + 1px) calc(var(--u) * 30 + 8px) rgb(0 45 100 / 0.22);
+  /* Light, smooth drop shadow under white text for legibility on bright sky and
+     grass. em-based, so it scales with each text size (min sizes for small text). */
+  --text-shadow: 0 max(1px, 0.04em) max(2px, 0.12em) rgb(0 35 80 / 0.22),
+    0 max(2px, 0.08em) max(6px, 0.4em) rgb(0 35 80 / 0.18);
   --sky: #0096ff;
 
   /* Film grain: one static noise tile split into a negative and a positive half
