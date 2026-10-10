@@ -162,6 +162,10 @@ a {
   pointer-events: none;
   background-size: 320px 320px;
   opacity: var(--grain-opacity);
+  /* rides the photo's load-in zoom (same box, origin and timing as .bg__zoom)
+     so the grain stays glued to the picture instead of sitting still on screen */
+  transform-origin: 50% 100%;
+  animation: bg-settle 3.2s var(--ease-out) both;
 }
 
 @media (max-width: 1800px) {
@@ -690,6 +694,8 @@ a {
 
 @media (prefers-reduced-motion: reduce) {
   .bg__zoom,
+  .stage::before,
+  .stage::after,
   .wordmark,
   .reveal {
     animation: none !important;
