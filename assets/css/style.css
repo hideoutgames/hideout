@@ -265,7 +265,9 @@ a {
   width: 1.1em; /* 22:16 */
   height: 0.8em;
   border-radius: 0.12em;
-  box-shadow: 0 0 0 1px rgb(255 255 255 / 0.25), 0 0.06em 0.2em rgb(0 40 90 / 0.25);
+  /* hairline edge + the same light drop shadow as the white text */
+  box-shadow: 0 0 0 1px rgb(255 255 255 / 0.25), 0 max(1px, 0.04em) max(2px, 0.12em) rgb(0 35 80 / 0.22),
+    0 max(2px, 0.08em) max(6px, 0.4em) rgb(0 35 80 / 0.18);
   flex: none;
   translate: 0 -0.03em; /* measured: centres the flag on the capital letters */
 }
