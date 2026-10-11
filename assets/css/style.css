@@ -13,10 +13,11 @@
 :root {
   --ink-light: #f8fafc;
   --ink-dark: #2b2b2b;
-  /* Light, smooth drop shadow under white text for legibility on bright sky and
-     grass. em-based, so it scales with each text size (min sizes for small text). */
-  --text-shadow: 0 max(1px, 0.04em) max(2px, 0.12em) rgb(0 35 80 / 0.22),
-    0 max(2px, 0.08em) max(6px, 0.4em) rgb(0 35 80 / 0.18);
+  /* Medium, smooth drop shadow under white text (and the flag) for legibility on
+     bright sky and grass. em-based, so it scales with each text size (min sizes
+     for small text). */
+  --text-shadow: 0 max(1px, 0.05em) max(2px, 0.14em) rgb(0 30 70 / 0.34),
+    0 max(2px, 0.1em) max(8px, 0.5em) rgb(0 30 70 / 0.28);
   --sky: #0096ff;
 
   /* Film grain: one static noise tile split into a negative and a positive half
@@ -269,9 +270,8 @@ a {
   width: 1.1em; /* 22:16 */
   height: 0.8em;
   border-radius: 0.12em;
-  /* hairline edge + the same light drop shadow as the white text */
-  box-shadow: 0 0 0 1px rgb(255 255 255 / 0.25), 0 max(1px, 0.04em) max(2px, 0.12em) rgb(0 35 80 / 0.22),
-    0 max(2px, 0.08em) max(6px, 0.4em) rgb(0 35 80 / 0.18);
+  /* hairline edge + the same drop shadow as the white text */
+  box-shadow: 0 0 0 1px rgb(255 255 255 / 0.25), var(--text-shadow);
   flex: none;
   translate: 0 -0.03em; /* measured: centres the flag on the capital letters */
 }
@@ -318,6 +318,8 @@ a {
   border: 1px solid rgb(255 255 255 / 0.34);
   box-shadow: 0 calc(var(--u) * 24) calc(var(--u) * 60) rgb(8 52 100 / 0.18),
     inset 0 1px 0 rgb(255 255 255 / 0.22);
+  -webkit-backdrop-filter: blur(16px) saturate(1.2);
+  backdrop-filter: blur(16px) saturate(1.2);
   text-decoration: none;
   transition: transform 0.5s var(--ease-out), background-color 0.4s var(--ease-soft),
     border-color 0.4s var(--ease-soft), box-shadow 0.5s var(--ease-out);
@@ -458,6 +460,14 @@ a {
   animation-delay: calc(var(--i, 0) * 120ms + 120ms);
 }
 
+/* Glass cards fade themselves (never a fading parent: that would stop their
+   backdrop blur from rendering until the fade ends), and only hold the start
+   frame, so nothing lingers afterwards to block the blur or the hover lift. */
+.tile.reveal,
+.panel.reveal {
+  animation-fill-mode: backwards;
+}
+
 /* ---------- Sub pages (games placeholder) ---------------------------------- */
 
 .sub {
@@ -483,6 +493,8 @@ a {
   border: 1px solid rgb(255 255 255 / 0.34);
   box-shadow: 0 calc(var(--u) * 24) calc(var(--u) * 60) rgb(8 52 100 / 0.18),
     inset 0 1px 0 rgb(255 255 255 / 0.22);
+  -webkit-backdrop-filter: blur(16px) saturate(1.2);
+  backdrop-filter: blur(16px) saturate(1.2);
 }
 
 .panel .mark {
