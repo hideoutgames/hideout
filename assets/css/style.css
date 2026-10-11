@@ -183,7 +183,7 @@ a {
   align-items: center;
   text-align: center;
   /* the cloud area's height is fixed independently of where the title sits */
-  --clouds-h: calc(var(--u) * 312);
+  --clouds-h: calc(var(--u) * 470);
   --hero-top: calc(var(--u) * 182);
   padding: var(--hero-top) 24px 0;
 }
@@ -608,7 +608,7 @@ a {
      contact pair, which stays right above the wordmark. On short screens the gap
      collapses to its minimum and the page simply scrolls. */
   .page {
-    --clouds-h: calc(env(safe-area-inset-top, 0px) + clamp(70px, 14svh, 150px) + 10px);
+    --clouds-h: calc(env(safe-area-inset-top, 0px) + clamp(120px, 26svh, 260px));
     --hero-top: calc(env(safe-area-inset-top, 0px) + clamp(36px, 8svh, 90px));
     padding: var(--hero-top) max(20px, env(safe-area-inset-right, 0px)) 0 max(20px, env(safe-area-inset-left, 0px));
   }
