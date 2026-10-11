@@ -127,7 +127,6 @@ a {
    ========================================================================== */
 
 .hero {
-  --p: 0;                   /* scroll progress through the hero, 0..1 (games.js) */
   position: relative;
   isolation: isolate;
   min-height: clamp(560px, 92svh, 1040px);
@@ -211,20 +210,40 @@ a {
 }
 
 /* Scrolling away: the title block lags behind the page (parallax) while it
-   fades, shrinks slightly and softens; the sky drifts down at its own, slower
-   pace and dims. Driven by --p, so it tracks the scroll position exactly. */
+   fades and shrinks slightly; the sky drifts down at its own, slower pace and
+   dims. A CSS scroll-driven animation tied to the hero leaving the viewport,
+   so the browser runs it in step with the scroll itself (no JS, no lag on
+   momentum scrolling). Browsers without scroll timelines keep a still hero. */
 @media (prefers-reduced-motion: no-preference) {
-  .hero__inner {
-    translate: 0 calc(var(--p) * 38vh);
-    scale: calc(1 - var(--p) * 0.08);
-    opacity: calc(1 - var(--p) * 1.5);
-    filter: blur(calc(var(--p) * 8px));
-    will-change: translate, opacity;
+  @supports (animation-timeline: view()) {
+    .hero {
+      view-timeline: --hero block;
+    }
+    .hero__inner {
+      animation: hero-away linear both;
+      animation-timeline: --hero;
+      animation-range: exit 0% exit 70%;
+    }
+    .hero__photo {
+      animation: hero-sky-away linear both;
+      animation-timeline: --hero;
+      animation-range: exit 0% exit 100%;
+    }
   }
-  .hero__photo {
-    translate: 0 calc(var(--p) * 30%);
-    opacity: calc(1 - var(--p) * 0.6);
-    will-change: translate;
+}
+
+@keyframes hero-away {
+  to {
+    translate: 0 90%;
+    scale: 0.92;
+    opacity: 0;
+  }
+}
+
+@keyframes hero-sky-away {
+  to {
+    translate: 0 30%;
+    opacity: 0.4;
   }
 }
 
@@ -255,7 +274,7 @@ a {
 }
 
 .js .hero__scroll.reveal.is-in {
-  opacity: calc(0.8 - var(--p) * 4);   /* first thing to go once you scroll */
+  opacity: 0.8;
 }
 
 .js .hero__scroll.reveal.is-in:hover,
