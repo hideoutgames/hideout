@@ -57,21 +57,23 @@
          GAME: Boom Bears on Stream
          -----------------------------------------------------------------
          Every game is one <section class="game game--<slug>">. The shared
-         .game rules give it the dithered edges (top and bottom) that blend
-         its colours into the cream page; the .game--<slug> block in
-         games.css sets its palette (--game-bg, --game-edge-top,
-         --game-edge-bottom) and any game-specific styling. Assets live in
-         games/<slug>/. To add a game, copy this section, change the slug
-         and add a matching theme block in games.css.
+         .game rules give it transition bands at its top and bottom that
+         blend its colours into its neighbours; the .game--<slug> block in
+         games.css sets its palette, those bands and any game-specific
+         styling. Assets live in games/<slug>/. Elements animate in on
+         scroll with class="reveal" plus an optional data-reveal style
+         (rise, pop, from-left, from-right) and a --i stagger step. To add
+         a game, copy this section, change the slug and add a matching
+         theme block in games.css.
          ================================================================= -->
     <section class="game game--boom-bears" id="boom-bears" aria-labelledby="boom-bears-title">
       <div class="game__wrap">
         <div class="bb-intro">
-          <img class="bb-logo reveal" src="boom-bears/logo.webp" width="286" height="368" alt="Boom Bears on Stream" loading="lazy" decoding="async">
-          <div class="bb-copy reveal" style="--i:1">
-            <h2 class="bb-title" id="boom-bears-title">Let your viewers fight it out on stream.</h2>
-            <p class="bb-text">A cute &amp; chaotic auto-battler battle royale for up to 100 players, plus a word-guessing game to find the biggest brain in chat.</p>
-            <a class="bb-button" href="https://store.steampowered.com/app/1878970/Boom_Bears_on_Stream/" rel="noopener">
+          <img class="bb-logo reveal" data-reveal="pop" src="boom-bears/logo.webp" width="286" height="368" alt="Boom Bears on Stream" loading="lazy" decoding="async">
+          <div class="bb-copy reveal" data-reveal="rise" style="--i:1">
+            <h2 class="bb-title reveal" style="--i:3" id="boom-bears-title">Let your viewers fight it out on stream.</h2>
+            <p class="bb-text reveal" style="--i:4">A cute &amp; chaotic auto-battler battle royale for up to 100 players, plus a word-guessing game to find the biggest brain in chat.</p>
+            <a class="bb-button reveal" data-reveal="pop" style="--i:5.5" href="https://store.steampowered.com/app/1878970/Boom_Bears_on_Stream/" rel="noopener">
               View on Steam
               <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M3 8h9.5M8.5 4 12.5 8l-4 4" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </a>
@@ -79,14 +81,14 @@
         </div>
 
         <div class="bb-modes">
-          <figure class="bb-card bb-card--battle reveal">
+          <figure class="bb-card bb-card--battle reveal" data-reveal="from-left">
             <div class="bb-card__shot"><img src="boom-bears/battle.jpg" width="1280" height="720" alt="Dozens of colourful bears battling on a grassy island, one just eliminated" loading="lazy" decoding="async"></div>
             <figcaption>
               <b>Battle Royale</b>
               Bombs, rocket launchers and air strikes. The last bear standing is crowned champion.
             </figcaption>
           </figure>
-          <figure class="bb-card bb-card--words reveal" style="--i:1">
+          <figure class="bb-card bb-card--words reveal" data-reveal="from-right" style="--i:1.5">
             <div class="bb-card__shot"><img src="boom-bears/words.jpg" width="1280" height="720" alt="Word Guesser board with shuffled letters, hidden words and a chat leaderboard" loading="lazy" decoding="async"></div>
             <figcaption>
               <b>Word Guesser</b>
