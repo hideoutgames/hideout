@@ -7,7 +7,7 @@
      .games    one <section class="game game--<slug>"> per game; each brings
                its own theme, with dithered edges that pick up the colour of
                whatever sits above / below it
-     .footer   black band, then the skyline art from the design + text +
+     .footer   dark grey band, then the skyline art from the design + text +
                giant HIDEOUT wordmark
    ========================================================================== */
 
@@ -283,13 +283,13 @@ a {
   --bb-grass: #00e759;
 
   --game-bg: var(--bb-grass);    /* the sky is painted by .game__wrap */
-  /* Top: a pixel-art dawn that starts at the hero's night colour and dithers
-     through purple and pink, past a few clouds, into the day sky. */
-  --game-edge-top: url("boom-bears/dawn.png") top left / 1024px 480px repeat-x, var(--bb-sky);
+  /* Top: a pixel-art band that starts at the hero's night colour and dithers
+     through dark purple and purple into blue and the day sky. */
+  --game-edge-top: url("boom-bears/sky-in.png") top left / 1024px 480px repeat-x, var(--bb-sky);
   --game-mask-top: none;
   --game-edge-top-h: 480px;
   --game-gap-top: 480px;
-  /* Bottom: the grass dithers out into the footer's black band. */
+  /* Bottom: the grass dithers out into the footer's dark grey band. */
   --game-edge-bottom: var(--bb-grass);
 
   color: var(--bb-ink);
@@ -503,14 +503,14 @@ a {
    ========================================================================== */
 
 .footer {
-  --footer-black: #000;
+  --footer-bg: #1c1c1c;     /* very dark grey */
   position: relative;
   /* Starts right under the last game section (this margin collapses with the
      section's margin-bottom), so the game's bottom band dithers out over the
-     black padding; the art then sits whole on black below it. */
+     dark grey padding; the art then sits whole on that grey below it. */
   margin-top: calc(var(--edge) * -1);
   padding-top: calc(var(--edge) + 40px);
-  background: var(--footer-black);
+  background: var(--footer-bg);
   color: var(--cream);
 }
 
