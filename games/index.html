@@ -5,13 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>HIDEOUT GAMES™</title>
   <meta name="description" content="Independent game developer based in Norway.">
-  <meta name="theme-color" content="#fbf7ea">
+  <meta name="theme-color" content="#fffeef">
   <meta name="color-scheme" content="light">
 
-  <link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="img/favicon.svg" type="image/svg+xml">
 
   <meta property="og:type" content="website">
-  <meta property="og:site_name" content="Hideout">
+  <meta property="og:site_name" content="Hideout Games">
   <meta property="og:title" content="HIDEOUT GAMES™">
   <meta property="og:description" content="Independent game developer based in Norway.">
   <meta property="og:url" content="https://hideout.no/games/">
@@ -20,67 +20,110 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;700;800&amp;family=Fredoka:wght@500;600;700&amp;display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="../assets/css/style.css?v=24">
+  <link rel="stylesheet" href="games.css?v=1">
+  <script>document.documentElement.classList.add("js")</script>
 </head>
 <body>
-  <!-- Grain for the project logos: same noise as the page, added to each logo's
-       un-premultiplied colour and clipped back to its own alpha (no edge fringe). -->
-  <svg class="defs" width="0" height="0" aria-hidden="true" focusable="false">
-    <filter id="logo-grain" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">
-      <feTurbulence type="fractalNoise" baseFrequency="1.37" numOctaves="1" seed="7" stitchTiles="stitch" result="noise"/>
-      <feColorMatrix in="noise" type="matrix" values="1 0 0 0 0  1 0 0 0 0  1 0 0 0 0  0 0 0 0 1" result="grey"/>
-      <!-- white -> cream (#fbf7ea), then opaque so the grain is added to the true colour -->
-      <feColorMatrix in="SourceGraphic" type="matrix" values="0.984 0 0 0 0  0 0.969 0 0 0  0 0 0.918 0 0  0 0 0 0 1" result="solid"/>
-      <feComposite in="solid" in2="grey" operator="arithmetic" k1="0" k2="1" k3="0.585" k4="-0.2925" result="grainy"/>
-      <feComposite in="grainy" in2="SourceAlpha" operator="in"/>
-    </filter>
-    <!-- same grain; white parts of a multi-colour logo become dark ink while its
-         warm accents (orange/yellow, which have little blue) keep their colour:
-         out = in - 0.83 * blue, so white -> #2b2b2b and orange stays orange -->
-    <filter id="logo-grain-accent" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">
-      <feTurbulence type="fractalNoise" baseFrequency="1.37" numOctaves="1" seed="7" stitchTiles="stitch" result="noise"/>
-      <feColorMatrix in="noise" type="matrix" values="1 0 0 0 0  1 0 0 0 0  1 0 0 0 0  0 0 0 0 1" result="grey"/>
-      <feColorMatrix in="SourceGraphic" type="matrix" values="1 0 -0.83 0 0  0 1 -0.83 0 0  0 0 0.17 0 0  0 0 0 0 1" result="solid"/>
-      <feComposite in="solid" in2="grey" operator="arithmetic" k1="0" k2="1" k3="0.585" k4="-0.2925" result="grainy"/>
-      <feComposite in="grainy" in2="SourceAlpha" operator="in"/>
-    </filter>
-    <!-- same grain, but the logo is drawn in dark ink (#2b2b2b) for the cream cards -->
-    <filter id="logo-grain-ink" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">
-      <feTurbulence type="fractalNoise" baseFrequency="1.37" numOctaves="1" seed="7" stitchTiles="stitch" result="noise"/>
-      <feColorMatrix in="noise" type="matrix" values="1 0 0 0 0  1 0 0 0 0  1 0 0 0 0  0 0 0 0 1" result="grey"/>
-      <feColorMatrix in="SourceGraphic" type="matrix" values="0 0 0 0 0.169  0 0 0 0 0.169  0 0 0 0 0.169  0 0 0 0 1" result="solid"/>
-      <feComposite in="solid" in2="grey" operator="arithmetic" k1="0" k2="1" k3="0.585" k4="-0.2925" result="grainy"/>
-      <feComposite in="grainy" in2="SourceAlpha" operator="in"/>
-    </filter>
-  </svg>
-  <div class="stage">
-    <div class="bg" aria-hidden="true"></div>
-    <div class="dither dither--bottom" aria-hidden="true"></div>
 
-    <main class="page">
-      <div class="dither dither--top" aria-hidden="true"></div>
-      <div class="sub">
-        <h1 class="panel reveal" style="--i:0"><span class="mark mark--games"><img src="../assets/img/hideout-games-white.png" width="361" height="187" alt="Hideout Games" decoding="async"></span></h1>
-        <p class="sub__lead reveal" style="--i:1">Our games page is on its way. In the meantime, you can find our game on Steam.</p>
-        <a class="button reveal" style="--i:2" href="https://store.steampowered.com/app/1878970/Boom_Bears_on_Stream/">
-          Boom Bears on Steam
-          <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M3 8h9.5M8.5 4 12.5 8l-4 4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </a>
-        <a class="back reveal" style="--i:3" href="../">← Back to Hideout</a>
+  <!-- ===================================================================
+       HERO: eye logo + title over a tinted, scan-lined photo that dithers
+       out into the cream page.
+       Photo: Unsplash, photo-1511512578047-dfb367046420 (Unsplash License).
+       =================================================================== -->
+  <header class="hero">
+    <div class="hero__photo" aria-hidden="true">
+      <img src="img/hero-arcade-1920.jpg"
+           srcset="img/hero-arcade-1280.jpg 1280w, img/hero-arcade-1920.jpg 1920w, img/hero-arcade-2400.jpg 2400w"
+           sizes="100vw" width="2400" height="1600" alt="" decoding="async" fetchpriority="high">
+    </div>
+    <div class="hero__inner">
+      <svg class="eyes hero__eyes reveal" viewBox="0 0 191 43" role="img" aria-label="Hideout eyes" focusable="false">
+        <path d="M15 0 0 36l76 7zM176 0l15 36-76 7z" fill="currentColor"/>
+      </svg>
+      <h1 class="hero__title reveal" style="--i:1">HIDEOUT GAMES<span class="tm">™</span></h1>
+      <p class="hero__lead reveal" style="--i:2">Independent games, made in Norway.</p>
+      <nav class="hero__games reveal" style="--i:3" aria-label="Games">
+        <a href="#boom-bears">Boom Bears on Stream</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="games">
+
+    <!-- =================================================================
+         GAME: Boom Bears on Stream
+         -----------------------------------------------------------------
+         Every game is one <section class="game game--<slug>">. The shared
+         .game rules give it the dithered edges (top and bottom) that blend
+         its colours into the cream page; the .game--<slug> block in
+         games.css sets its palette (--game-bg, --game-edge-top,
+         --game-edge-bottom) and any game-specific styling. Assets live in
+         games/<slug>/. To add a game, copy this section, change the slug
+         and add a matching theme block in games.css.
+         ================================================================= -->
+    <section class="game game--boom-bears" id="boom-bears" aria-labelledby="boom-bears-title">
+      <div class="game__wrap">
+        <div class="bb-intro">
+          <img class="bb-logo reveal" src="boom-bears/logo.webp" width="286" height="368" alt="Boom Bears on Stream" loading="lazy" decoding="async">
+          <div class="bb-copy">
+            <p class="bb-kicker reveal">Stream game for Twitch chat</p>
+            <h2 class="bb-title reveal" style="--i:1" id="boom-bears-title">Let your viewers fight it out on stream.</h2>
+            <p class="bb-text reveal" style="--i:2">A cute &amp; chaotic auto-battler battle royale for up to 100 players, plus a word-guessing game to find the biggest brain in chat. Chat types <code>!join</code>, you hit play.</p>
+            <ul class="bb-chips reveal" style="--i:3">
+              <li>Up to 100 players</li>
+              <li>Overlay mode</li>
+              <li>Channel Points</li>
+              <li>Daily leaderboard</li>
+            </ul>
+            <a class="bb-button reveal" style="--i:4" href="https://store.steampowered.com/app/1878970/Boom_Bears_on_Stream/" rel="noopener">
+              View on Steam
+              <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M3 8h9.5M8.5 4 12.5 8l-4 4" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <div class="bb-modes">
+          <figure class="bb-card bb-card--battle reveal">
+            <div class="bb-card__shot"><img src="boom-bears/battle.jpg" width="1280" height="720" alt="Dozens of colourful bears battling on a grassy island, one just eliminated" loading="lazy" decoding="async"></div>
+            <figcaption>
+              <b>Battle Royale</b>
+              Bombs, rocket launchers and air strikes. The last bear standing is crowned champion.
+            </figcaption>
+          </figure>
+          <figure class="bb-card bb-card--words reveal" style="--i:1">
+            <div class="bb-card__shot"><img src="boom-bears/words.jpg" width="1280" height="720" alt="Word Guesser board with shuffled letters, hidden words and a chat leaderboard" loading="lazy" decoding="async"></div>
+            <figcaption>
+              <b>Word Guesser</b>
+              Eight shuffled letters, ten hidden words, three rounds. Who's the biggest 5head in chat?
+            </figcaption>
+          </figure>
+        </div>
       </div>
 
-      <footer class="footer reveal" style="--i:4">
-        <p>© <span id="year">2026</span> Bru Development ENK. Hideout™, Hideout Games™ and Haptic™ are trademarks of Bru Development ENK.</p>
-      </footer>
-    </main>
+      <div class="bb-landscape" aria-hidden="true">
+        <img src="boom-bears/landscape.jpg" width="1920" height="620" alt="" loading="lazy" decoding="async">
+      </div>
+    </section>
 
-    <div class="wordmark" aria-hidden="true">
-      <img src="../assets/img/hideout-wordmark-cut.png" width="2560" height="204" alt="" decoding="async">
+  </main>
+
+  <!-- ===================================================================
+       FOOTER: skyline art from the design, eyes baked in; text and the
+       giant cut-off HIDEOUT wordmark sit on top.
+       =================================================================== -->
+  <footer class="footer">
+    <img class="footer__art" src="img/footer-skyline-1920.webp"
+         srcset="img/footer-skyline-1280.webp 1280w, img/footer-skyline-1920.webp 1920w, img/footer-skyline-2560.webp 2560w"
+         sizes="100vw" width="2560" height="1696" alt="" loading="lazy" decoding="async">
+    <div class="footer__text">
+      <p>© Bru Development ENK. Hideout™ and Hideout Games™ are trademarks of Bru Development ENK.</p>
+      <p>Based in Norway. Contact at: <a href="mailto:mail@hideout.no">mail@hideout.no</a></p>
     </div>
-  </div>
+    <div class="footer__wordmark" aria-hidden="true"></div>
+  </footer>
 
-  <script src="../assets/js/main.js?v=8" defer></script>
+  <script src="games.js?v=1" defer></script>
 </body>
 </html>
