@@ -21,10 +21,13 @@
   --sky: #0096ff;
 
   /* Film grain: one static noise tile split into a negative and a positive half
-     (see "Film grain" below). Shared by the page and the project logos. */
-  --grain-neg: url("data:image/svg+xml,%3Csvg%20xmlns=%27http://www.w3.org/2000/svg%27%20width=%27320%27%20height=%27320%27%3E%3Cfilter%20id=%27n%27%20x=%270%27%20y=%270%27%20width=%27100%25%27%20height=%27100%25%27%20color-interpolation-filters=%27sRGB%27%3E%3CfeTurbulence%20type=%27fractalNoise%27%20baseFrequency=%273.1%27%20numOctaves=%271%27%20seed=%277%27%20stitchTiles=%27stitch%27/%3E%3CfeColorMatrix%20type=%27matrix%27%20values=%271%200%200%200%200%20%201%200%200%200%200%20%201%200%200%200%200%20%200%200%200%200%201%27/%3E%3CfeComponentTransfer%3E%3CfeFuncR%20type=%27table%27%20tableValues=%270.5%200%200%27/%3E%3CfeFuncG%20type=%27table%27%20tableValues=%270.5%200%200%27/%3E%3CfeFuncB%20type=%27table%27%20tableValues=%270.5%200%200%27/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect%20width=%27100%25%27%20height=%27100%25%27%20filter=%27url%28%23n%29%27/%3E%3C/svg%3E");
-  --grain-pos: url("data:image/svg+xml,%3Csvg%20xmlns=%27http://www.w3.org/2000/svg%27%20width=%27320%27%20height=%27320%27%3E%3Cfilter%20id=%27n%27%20x=%270%27%20y=%270%27%20width=%27100%25%27%20height=%27100%25%27%20color-interpolation-filters=%27sRGB%27%3E%3CfeTurbulence%20type=%27fractalNoise%27%20baseFrequency=%273.1%27%20numOctaves=%271%27%20seed=%277%27%20stitchTiles=%27stitch%27/%3E%3CfeColorMatrix%20type=%27matrix%27%20values=%271%200%200%200%200%20%201%200%200%200%200%20%201%200%200%200%200%20%200%200%200%200%201%27/%3E%3CfeComponentTransfer%3E%3CfeFuncR%20type=%27table%27%20tableValues=%270%200%200.5%27/%3E%3CfeFuncG%20type=%27table%27%20tableValues=%270%200%200.5%27/%3E%3CfeFuncB%20type=%27table%27%20tableValues=%270%200%200.5%27/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect%20width=%27100%25%27%20height=%27100%25%27%20filter=%27url%28%23n%29%27/%3E%3C/svg%3E");
-  --grain-opacity: 0.85;
+     (see "Film grain" below). Shared by the page and the project logos.
+     baseFrequency 1.37 (per CSS px) gives a grain a little larger than a device
+     pixel on retina screens; keep it non-round: whole/half values land pixels on
+     the noise lattice, where it is zero, and the grain vanishes on 1x screens. */
+  --grain-neg: url("data:image/svg+xml,%3Csvg%20xmlns=%27http://www.w3.org/2000/svg%27%20width=%27320%27%20height=%27320%27%3E%3Cfilter%20id=%27n%27%20x=%270%27%20y=%270%27%20width=%27100%25%27%20height=%27100%25%27%20color-interpolation-filters=%27sRGB%27%3E%3CfeTurbulence%20type=%27fractalNoise%27%20baseFrequency=%271.37%27%20numOctaves=%271%27%20seed=%277%27%20stitchTiles=%27stitch%27/%3E%3CfeColorMatrix%20type=%27matrix%27%20values=%271%200%200%200%200%20%201%200%200%200%200%20%201%200%200%200%200%20%200%200%200%200%201%27/%3E%3CfeComponentTransfer%3E%3CfeFuncR%20type=%27table%27%20tableValues=%270.5%200%200%27/%3E%3CfeFuncG%20type=%27table%27%20tableValues=%270.5%200%200%27/%3E%3CfeFuncB%20type=%27table%27%20tableValues=%270.5%200%200%27/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect%20width=%27100%25%27%20height=%27100%25%27%20filter=%27url%28%23n%29%27/%3E%3C/svg%3E");
+  --grain-pos: url("data:image/svg+xml,%3Csvg%20xmlns=%27http://www.w3.org/2000/svg%27%20width=%27320%27%20height=%27320%27%3E%3Cfilter%20id=%27n%27%20x=%270%27%20y=%270%27%20width=%27100%25%27%20height=%27100%25%27%20color-interpolation-filters=%27sRGB%27%3E%3CfeTurbulence%20type=%27fractalNoise%27%20baseFrequency=%271.37%27%20numOctaves=%271%27%20seed=%277%27%20stitchTiles=%27stitch%27/%3E%3CfeColorMatrix%20type=%27matrix%27%20values=%271%200%200%200%200%20%201%200%200%200%200%20%201%200%200%200%200%20%200%200%200%200%201%27/%3E%3CfeComponentTransfer%3E%3CfeFuncR%20type=%27table%27%20tableValues=%270%200%200.5%27/%3E%3CfeFuncG%20type=%27table%27%20tableValues=%270%200%200.5%27/%3E%3CfeFuncB%20type=%27table%27%20tableValues=%270%200%200.5%27/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect%20width=%27100%25%27%20height=%27100%25%27%20filter=%27url%28%23n%29%27/%3E%3C/svg%3E");
+  --grain-opacity: 0.64;
 
   /* Fluid design unit: 1u == 1 CSS px on the 2560x1702 mockup.
      Scales with whichever viewport dimension is the limiting one, so the whole
@@ -171,7 +174,7 @@ a {
 
 @media (max-width: 1800px) {
   :root {
-    --grain-opacity: 0.72; /* grain is a fixed pixel size, so ease it off on smaller screens */
+    --grain-opacity: 0.54; /* ease the grain off a little on smaller screens */
   }
 }
 
