@@ -28,14 +28,14 @@
 <body>
 
   <!-- ===================================================================
-       HERO: eye logo + title over a tinted, scan-lined photo that dithers
-       out into the cream page.
-       Photo: Unsplash, photo-1511512578047-dfb367046420 (Unsplash License).
+       HERO: eye logo + title over a tinted, scan-lined night sky that fades
+       into solid night; the first game's dawn band picks up from there.
+       Photo: Unsplash, photo-1528722828814-77b9b83aafb2 (Unsplash License).
        =================================================================== -->
   <header class="hero">
     <div class="hero__photo" aria-hidden="true">
-      <img src="img/hero-arcade-1920.jpg"
-           srcset="img/hero-arcade-1280.jpg 1280w, img/hero-arcade-1920.jpg 1920w, img/hero-arcade-2400.jpg 2400w"
+      <img src="img/hero-night-1920.jpg"
+           srcset="img/hero-night-1280.jpg 1280w, img/hero-night-1920.jpg 1920w, img/hero-night-2400.jpg 2400w"
            sizes="100vw" width="2400" height="1600" alt="" decoding="async" fetchpriority="high">
     </div>
     <div class="hero__inner">
@@ -44,9 +44,10 @@
       </svg>
       <h1 class="hero__title reveal" style="--i:1">HIDEOUT GAMES<span class="tm">™</span></h1>
       <p class="hero__lead reveal" style="--i:2">Independent games, made in Norway.</p>
-      <nav class="hero__games reveal" style="--i:3" aria-label="Games">
-        <a href="#boom-bears">Boom Bears on Stream</a>
-      </nav>
+      <a class="hero__scroll reveal" style="--i:3" href="#boom-bears">
+        Scroll
+        <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M8 2.5v10.5M3.5 8.5 8 13l4.5-4.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
     </div>
   </header>
 
@@ -67,17 +68,10 @@
       <div class="game__wrap">
         <div class="bb-intro">
           <img class="bb-logo reveal" src="boom-bears/logo.webp" width="286" height="368" alt="Boom Bears on Stream" loading="lazy" decoding="async">
-          <div class="bb-copy">
-            <p class="bb-kicker reveal">Stream game for Twitch chat</p>
-            <h2 class="bb-title reveal" style="--i:1" id="boom-bears-title">Let your viewers fight it out on stream.</h2>
-            <p class="bb-text reveal" style="--i:2">A cute &amp; chaotic auto-battler battle royale for up to 100 players, plus a word-guessing game to find the biggest brain in chat. Chat types <code>!join</code>, you hit play.</p>
-            <ul class="bb-chips reveal" style="--i:3">
-              <li>Up to 100 players</li>
-              <li>Overlay mode</li>
-              <li>Channel Points</li>
-              <li>Daily leaderboard</li>
-            </ul>
-            <a class="bb-button reveal" style="--i:4" href="https://store.steampowered.com/app/1878970/Boom_Bears_on_Stream/" rel="noopener">
+          <div class="bb-copy reveal" style="--i:1">
+            <h2 class="bb-title" id="boom-bears-title">Let your viewers fight it out on stream.</h2>
+            <p class="bb-text">A cute &amp; chaotic auto-battler battle royale for up to 100 players, plus a word-guessing game to find the biggest brain in chat.</p>
+            <a class="bb-button" href="https://store.steampowered.com/app/1878970/Boom_Bears_on_Stream/" rel="noopener">
               View on Steam
               <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M3 8h9.5M8.5 4 12.5 8l-4 4" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </a>
