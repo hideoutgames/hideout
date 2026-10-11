@@ -16,8 +16,8 @@
   --ink-light: var(--cream);
   --ink-dark: #2b2b2b;
   /* flat project cards */
-  --card: #4a8cc4;
-  --card-hover: #5698cf;
+  --card: #f0e7cf;
+  --card-hover: #ebe0c3;
   /* Medium, smooth drop shadow under white text (and the flag) for legibility on
      bright sky and grass. em-based, so it scales with each text size (min sizes
      for small text). */
@@ -215,6 +215,16 @@ a {
   filter: url("#logo-grain");
 }
 
+/* on the cream cards, logos are drawn in dark ink; HAPTIC keeps its warm
+   orange/yellow accent */
+.mark--games img {
+  filter: url("#logo-grain-ink");
+}
+
+.mark--haptic img {
+  filter: url("#logo-grain-accent");
+}
+
 /* ---------- Page content --------------------------------------------------- */
 
 .page {
@@ -287,7 +297,10 @@ a {
 /* ---------- Projects -------------------------------------------------------- */
 
 .projects {
-  position: relative; /* anchors the cream glow; no z-index, so the glow can sit under the grain */
+  /* cream band: solid padding around the content, then a soft feather */
+  --band-pad: calc(var(--u) * 90);
+  --band-feather: calc(var(--u) * 150);
+  position: relative; /* anchors the cream band; no z-index, so the band can sit under the grain */
   margin-top: calc(var(--u) * 158);
   width: 100%;
   display: flex;
@@ -295,21 +308,29 @@ a {
   align-items: center;
 }
 
-/* A soft cream glow covering the Projects section and fading out to nothing at
-   its edges, so it melts into the sky. It sits under the page grain (z 50), which
-   dithers it and keeps the gradient free of banding. */
+/* The Projects section is a full-width cream band: solid behind the content,
+   feathering out softly above and below so it melts into the sky and grass.
+   It sits under the page grain (z 50), which dithers it and keeps the
+   gradient free of banding. */
 .projects::before {
   content: "";
   position: absolute;
   z-index: 2;
   left: 50%;
-  top: 50%;
-  width: calc(var(--u) * 2600);
-  height: calc(var(--u) * 1250);
-  translate: -50% -50%;
+  top: calc(var(--band-pad) * -1 - var(--band-feather));
+  bottom: calc(var(--band-pad) * -1 - var(--band-feather));
+  width: 100vw;
+  translate: -50% 0;
   pointer-events: none;
-  background: radial-gradient(closest-side, rgb(251 247 234 / 0.95) 0%, rgb(251 247 234 / 0.92) 32%,
-      rgb(251 247 234 / 0.74) 52%, rgb(251 247 234 / 0.42) 70%, rgb(251 247 234 / 0.14) 86%, rgb(251 247 234 / 0) 100%);
+  background: linear-gradient(to bottom,
+      rgb(251 247 234 / 0) 0,
+      rgb(251 247 234 / 0.35) calc(var(--band-feather) * 0.45),
+      rgb(251 247 234 / 0.8) calc(var(--band-feather) * 0.8),
+      var(--cream) var(--band-feather),
+      var(--cream) calc(100% - var(--band-feather)),
+      rgb(251 247 234 / 0.8) calc(100% - var(--band-feather) * 0.8),
+      rgb(251 247 234 / 0.35) calc(100% - var(--band-feather) * 0.45),
+      rgb(251 247 234 / 0) 100%);
   animation: fade-in 1.6s var(--ease-out) 0.3s both;
 }
 
@@ -661,9 +682,9 @@ a {
     font-size: clamp(19px, 5.4vw, 24px);
   }
 
-  .projects::before {
-    width: 190vw;
-    height: calc(100% + 300px);
+  .projects {
+    --band-pad: 28px;
+    --band-feather: 56px;
   }
 
   .tiles {
