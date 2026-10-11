@@ -21,6 +21,7 @@
   --edge: 160px;
 
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);   /* overshoots a little */
 }
 
 *,
@@ -57,27 +58,66 @@ a {
   color: inherit;
 }
 
-/* ---------- Reveal on scroll (only when JS is running) -------------------- */
+/* ---------- Reveal on scroll (only when JS is running) --------------------
+   .reveal fades an element up into place once it scrolls into view (games.js
+   adds .is-in). data-reveal picks a style: "rise" (longer travel), "pop"
+   (springs up from small and tilted), "from-left" / "from-right" (slides in
+   from the side with a tilt). --i staggers it by 90ms steps; --rest is an
+   element's resting tilt. Uses the individual translate / scale / rotate
+   properties, so an element's own transform (hover, press) still composes. */
 
 .js .reveal {
+  --d: calc(var(--i, 0) * 90ms);
+  --move: var(--ease-out);
   opacity: 0;
-  transform: translateY(18px);
+  translate: 0 28px;
   transition:
-    opacity 0.9s var(--ease-out) calc(var(--i, 0) * 90ms),
-    transform 0.9s var(--ease-out) calc(var(--i, 0) * 90ms);
+    opacity 0.8s var(--ease-out) var(--d),
+    translate 1.1s var(--move) var(--d),
+    scale 1.1s var(--ease-spring) var(--d),
+    rotate 1.1s var(--ease-spring) var(--d),
+    transform 0.15s, box-shadow 0.15s, background-color 0.2s;
+}
+
+.js .reveal[data-reveal="rise"] {
+  translate: 0 64px;
+}
+
+.js .reveal[data-reveal="pop"] {
+  --move: var(--ease-spring);
+  translate: 0 24px;
+  scale: 0.55;
+  rotate: calc(var(--rest, 0deg) - 10deg);
+}
+
+.js .reveal[data-reveal="from-left"] {
+  --move: var(--ease-spring);
+  translate: -90px 48px;
+  rotate: calc(var(--rest, 0deg) - 8deg);
+}
+
+.js .reveal[data-reveal="from-right"] {
+  --move: var(--ease-spring);
+  translate: 90px 48px;
+  rotate: calc(var(--rest, 0deg) + 8deg);
 }
 
 .js .reveal.is-in {
   opacity: 1;
-  transform: none;
+  translate: none;
+  scale: none;
+  rotate: var(--rest, 0deg);
 }
 
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
   }
-  .js .reveal {
-    transform: none;
+  .js .reveal,
+  .js .reveal[data-reveal] {
+    translate: none;
+    scale: none;
+    rotate: var(--rest, 0deg);
     transition: opacity 0.4s linear;
   }
 }
@@ -87,6 +127,7 @@ a {
    ========================================================================== */
 
 .hero {
+  --p: 0;                   /* scroll progress through the hero, 0..1 (games.js) */
   position: relative;
   isolation: isolate;
   min-height: clamp(560px, 92svh, 1040px);
@@ -117,7 +158,8 @@ a {
   object-fit: cover;
   object-position: 50% 35%;
   mix-blend-mode: screen;
-  filter: saturate(0.7) contrast(1.1);
+  filter: saturate(0.6) brightness(0.75);
+  opacity: 0.6;             /* keeps the stars subtle */
 }
 
 .hero__photo::after {
@@ -168,6 +210,24 @@ a {
   text-shadow: 0 1px 18px rgba(15, 6, 54, 0.8);
 }
 
+/* Scrolling away: the title block lags behind the page (parallax) while it
+   fades, shrinks slightly and softens; the sky drifts down at its own, slower
+   pace and dims. Driven by --p, so it tracks the scroll position exactly. */
+@media (prefers-reduced-motion: no-preference) {
+  .hero__inner {
+    translate: 0 calc(var(--p) * 38vh);
+    scale: calc(1 - var(--p) * 0.08);
+    opacity: calc(1 - var(--p) * 1.5);
+    filter: blur(calc(var(--p) * 8px));
+    will-change: translate, opacity;
+  }
+  .hero__photo {
+    translate: 0 calc(var(--p) * 30%);
+    opacity: calc(1 - var(--p) * 0.6);
+    will-change: translate;
+  }
+}
+
 /* Plain "Scroll" cue with a gently bobbing arrow under it (not a button). */
 .hero__scroll {
   margin-top: clamp(40px, 5vw, 64px);
@@ -195,7 +255,7 @@ a {
 }
 
 .js .hero__scroll.reveal.is-in {
-  opacity: 0.8;
+  opacity: calc(0.8 - var(--p) * 4);   /* first thing to go once you scroll */
 }
 
 .js .hero__scroll.reveal.is-in:hover,
@@ -406,19 +466,22 @@ a {
     radial-gradient(circle at 50% 50%, var(--bb-lavender-dark) 0 2.5px, transparent 3px) 0 0 / 14px 14px,
     var(--bb-lavender);
   box-shadow: 0 10px 0 var(--bb-ink);
-  transform: rotate(-1.2deg);
-  transition: transform 0.35s var(--ease-out);
+  --rest: -1.2deg;
+  rotate: var(--rest);
+  transition: rotate 0.35s var(--ease-out), scale 0.35s var(--ease-out);
 }
 
 .bb-card--words {
-  transform: rotate(1.2deg);
+  --rest: 1.2deg;
 }
 
-.js .bb-card.reveal { transform: translateY(18px) rotate(-1.2deg); }
-.js .bb-card--words.reveal { transform: translateY(18px) rotate(1.2deg); }
-.js .bb-card.reveal.is-in { transform: rotate(-1.2deg); }
-.js .bb-card--words.reveal.is-in { transform: rotate(1.2deg); }
-.js .bb-card.reveal.is-in:hover { transform: rotate(0deg) scale(1.015); transition-delay: 0s; }
+.bb-card:hover,
+.js .bb-card.reveal.is-in:hover {
+  rotate: 0deg;
+  scale: 1.015;
+  transition-duration: 0.35s;
+  transition-delay: 0s;
+}
 
 .bb-card__shot {
   overflow: hidden;
@@ -432,6 +495,35 @@ a {
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+
+/* the screenshot settles from a slight zoom as its card lands */
+.js .bb-card__shot img {
+  scale: 1.15;
+  transition: scale 1.6s var(--ease-out) calc(var(--d, 0s) + 0.15s);
+}
+
+.js .bb-card.is-in .bb-card__shot img {
+  scale: 1;
+}
+
+/* once the logo has popped in, it floats gently */
+.js .bb-logo.is-in {
+  animation: bb-float 5s ease-in-out 1.4s infinite;
+}
+
+@keyframes bb-float {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-10px) rotate(1.5deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .js .bb-card__shot img {
+    scale: none;
+  }
+  .js .bb-logo.is-in {
+    animation: none;
+  }
 }
 
 .bb-card figcaption {
