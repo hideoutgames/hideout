@@ -19,7 +19,6 @@
   /* Soft cream halo behind dark text, so it stays legible where it overlaps the
      dither dots (title and subtitle sit on clean cream and opt out). */
   --text-shadow: 0 0 0.12em var(--cream), 0 0 0.4em var(--cream), 0 0 0.8em var(--cream);
-  --sky: #0096ff;
 
   /* Film grain: one static noise tile split into a negative and a positive half
      (see "Film grain" below). Shared by the page and the project logos.
