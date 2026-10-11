@@ -557,14 +557,14 @@ a {
   text-underline-offset: 0.2em;
 }
 
-/* Giant cut-off HIDEOUT, drawn in cream through the wordmark's alpha. */
+/* Giant cut-off HIDEOUT, drawn in cream through the wordmark's alpha; always
+   spans the full width so the whole word shows on phones too. */
 .footer__wordmark {
   position: absolute;
-  left: 50%;
+  left: 0;
   bottom: 0;
-  width: max(100%, 900px);
+  width: 100%;
   aspect-ratio: 2560 / 204;
-  transform: translateX(-50%);
   background: var(--cream);
   -webkit-mask: url("img/hideout-wordmark.png") center / 100% 100% no-repeat;
   mask: url("img/hideout-wordmark.png") center / 100% 100% no-repeat;
