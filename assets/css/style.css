@@ -6,13 +6,18 @@
      2. .bg__tint      white -> #0096ff vertical gradient @ 50%  (colour grade)
      3. .bg__glow      soft blue ellipse behind the top/centre content
      4. .page          content (heading, projects, contact, footer)
-     5. .wordmark      giant cut-off HIDEOUT, white @ 50%
+     5. .wordmark      giant cut-off HIDEOUT, solid cream
      6. .stage::after  static SVG feTurbulence film grain (scrolls with the page, non-interactive)
    ========================================================================== */
 
 :root {
-  --ink-light: #f8fafc;
+  /* cream: a barely-yellow warm white used for every "white" on the page */
+  --cream: #fbf7ea;
+  --ink-light: var(--cream);
   --ink-dark: #2b2b2b;
+  /* flat project cards */
+  --card: #4a8cc4;
+  --card-hover: #5698cf;
   /* Medium, smooth drop shadow under white text (and the flag) for legibility on
      bright sky and grass. em-based, so it scales with each text size (min sizes
      for small text). */
@@ -162,7 +167,7 @@ a {
   content: "";
   position: absolute; /* attached to the page, so it moves with scroll and overscroll */
   inset: 0;
-  z-index: 50; /* above photo and wordmark; below the text and glass tiles (z 60) */
+  z-index: 50; /* above photo and wordmark; below the text and project cards (z 60) */
   pointer-events: none;
   background-size: 320px 320px;
   opacity: var(--grain-opacity);
@@ -194,7 +199,7 @@ a {
   }
 }
 
-/* Logos inside the glass tiles carry their own grain via the inline SVG filter
+/* Logos inside the project cards carry their own grain via the inline SVG filter
    #logo-grain (in the HTML): the same noise added to the logo's colour while its
    alpha is left untouched, so the tile stays clean and the edges get no fringe. */
 .mark {
@@ -274,7 +279,7 @@ a {
   height: 0.8em;
   border-radius: 0.12em;
   /* hairline edge + the same drop shadow as the white text */
-  box-shadow: 0 0 0 1px rgb(255 255 255 / 0.25), var(--text-shadow);
+  box-shadow: 0 0 0 1px rgb(251 247 234 / 0.25), var(--text-shadow);
   flex: none;
   translate: 0 -0.03em; /* measured: centres the flag on the capital letters */
 }
@@ -282,6 +287,7 @@ a {
 /* ---------- Projects -------------------------------------------------------- */
 
 .projects {
+  position: relative; /* anchors the cream glow; no z-index, so the glow can sit under the grain */
   margin-top: calc(var(--u) * 158);
   width: 100%;
   display: flex;
@@ -289,12 +295,31 @@ a {
   align-items: center;
 }
 
+/* A soft cream glow covering the Projects section and fading out to nothing at
+   its edges, so it melts into the sky. It sits under the page grain (z 50), which
+   dithers it and keeps the gradient free of banding. */
+.projects::before {
+  content: "";
+  position: absolute;
+  z-index: 2;
+  left: 50%;
+  top: 50%;
+  width: calc(var(--u) * 2600);
+  height: calc(var(--u) * 1250);
+  translate: -50% -50%;
+  pointer-events: none;
+  background: radial-gradient(closest-side, rgb(251 247 234 / 0.95) 0%, rgb(251 247 234 / 0.92) 32%,
+      rgb(251 247 234 / 0.74) 52%, rgb(251 247 234 / 0.42) 70%, rgb(251 247 234 / 0.14) 86%, rgb(251 247 234 / 0) 100%);
+  animation: fade-in 1.6s var(--ease-out) 0.3s both;
+}
+
 .projects__title {
   margin: 0;
   font-weight: 700;
   font-size: clamp(22px, calc(var(--u) * 64), 150px);
   line-height: 1.1;
-  color: var(--ink-light);
+  color: var(--ink-dark);
+  text-shadow: none; /* sits on the cream glow, no shadow needed */
 }
 
 .tiles {
@@ -306,7 +331,7 @@ a {
   gap: calc(var(--u) * 56);
   justify-content: center;
   position: relative;
-  z-index: 60; /* above the page grain (z 50): the glass tiles read as objects on top */
+  z-index: 60; /* above the page grain (z 50): the cards read as objects on top */
 }
 
 .tile {
@@ -317,17 +342,10 @@ a {
   place-items: center;
   height: calc(var(--u) * 340);
   border-radius: calc(var(--u) * 36);
-  /* every part of the glass scales with --glass (0 = invisible, 1 = full), so the
-     load-in can build the glass up smoothly without fading the element itself */
-  background: linear-gradient(180deg, rgb(40 120 205 / calc(0.34 * var(--glass))), rgb(0 62 140 / calc(0.42 * var(--glass))));
-  border: 1px solid rgb(255 255 255 / calc(0.34 * var(--glass)));
-  box-shadow: 0 calc(var(--u) * 24) calc(var(--u) * 60) rgb(8 52 100 / calc(0.18 * var(--glass))),
-    inset 0 1px 0 rgb(255 255 255 / calc(0.22 * var(--glass)));
-  -webkit-backdrop-filter: blur(calc(16px * var(--glass))) saturate(calc(1 + 0.2 * var(--glass)));
-  backdrop-filter: blur(calc(16px * var(--glass))) saturate(calc(1 + 0.2 * var(--glass)));
+  /* flat rounded rect: one solid colour, no border, gradient, shadow or blur */
+  background: var(--card);
   text-decoration: none;
-  transition: transform 0.5s var(--ease-out), background-color 0.4s var(--ease-soft),
-    border-color 0.4s var(--ease-soft), box-shadow 0.5s var(--ease-out);
+  transition: transform 0.5s var(--ease-out), background-color 0.3s var(--ease-soft);
   -webkit-tap-highlight-color: transparent;
 }
 
@@ -343,10 +361,7 @@ a {
 
 .tile:hover {
   transform: translateY(calc(var(--u) * -6));
-  background: linear-gradient(180deg, rgb(50 135 220 / 0.42), rgb(0 70 155 / 0.5));
-  border-color: rgb(255 255 255 / 0.55);
-  box-shadow: 0 calc(var(--u) * 34) calc(var(--u) * 70) rgb(8 52 100 / 0.24),
-    inset 0 1px 0 rgb(255 255 255 / 0.3);
+  background: var(--card-hover);
 }
 
 .tile:hover .mark {
@@ -354,9 +369,9 @@ a {
 }
 
 .tile:focus-visible {
-  outline: 3px solid #fff;
+  outline: 3px solid var(--cream);
   outline-offset: 5px;
-  box-shadow: 0 0 0 8px rgb(0 60 130 / 0.45), 0 calc(var(--u) * 34) calc(var(--u) * 70) rgb(8 52 100 / 0.24);
+  box-shadow: 0 0 0 8px rgb(0 60 130 / 0.45);
 }
 
 /* ---------- Contact --------------------------------------------------------- */
@@ -368,7 +383,7 @@ a {
   font-weight: 500;
   font-size: clamp(14px, calc(var(--u) * 30), 70px);
   line-height: 1.35;
-  color: #fff;
+  color: var(--cream);
   text-decoration: none;
   white-space: nowrap;
   /* black @ ~24%, fading to transparent at both edges */
@@ -387,7 +402,7 @@ a {
 }
 
 .contact:focus-visible {
-  outline: 2px solid #fff;
+  outline: 2px solid var(--cream);
   outline-offset: 4px;
 }
 
@@ -401,7 +416,6 @@ a {
   font-size: clamp(11px, calc(var(--u) * 19), 22px);
   line-height: 1.4;
   color: var(--ink-light);
-  opacity: 0.9;
   text-wrap: balance;
 }
 
@@ -425,6 +439,17 @@ a {
   width: 100%;
   height: auto;
   max-width: none;
+  visibility: hidden; /* only sizes the box; the cream fill below draws the letters */
+}
+
+.wordmark::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--cream);
+  /* solid (fully opaque) cream letters */
+  -webkit-mask: url("../img/hideout-wordmark-solid.png") center / 100% 100% no-repeat;
+  mask: url("../img/hideout-wordmark-solid.png") center / 100% 100% no-repeat;
 }
 
 /* ---------- Entrance animation (opacity + transform only) ------------------ */
@@ -465,29 +490,6 @@ a {
   animation-delay: calc(var(--i, 0) * 120ms + 120ms);
 }
 
-/* Glass cards never fade with opacity: browsers either drop the backdrop blur
-   while an element (or its parent) is translucent, or ignore the opacity for the
-   blurred backdrop, so the glass popped in. Instead the glass itself builds up
-   (--glass 0 -> 1: blur, tint, border, shadow) as the card rises, and the logo
-   fades in on its own. Fill-mode backwards: nothing lingers afterwards to block
-   the hover lift. */
-@property --glass {
-  syntax: "<number>";
-  inherits: false;
-  initial-value: 1;
-}
-
-@keyframes glass-in {
-  from {
-    --glass: 0;
-    transform: translate3d(0, calc(var(--u) * 28 + 6px), 0);
-  }
-  to {
-    --glass: 1;
-    transform: none;
-  }
-}
-
 @keyframes fade-in {
   from {
     opacity: 0;
@@ -497,17 +499,11 @@ a {
   }
 }
 
+/* Cards fade + rise on their own and only hold the start frame, so nothing
+   lingers afterwards to block the hover lift. */
 .tile.reveal,
 .panel.reveal {
-  animation-name: glass-in;
-  animation-duration: 1.2s;
   animation-fill-mode: backwards;
-}
-
-.tile.reveal .mark,
-.panel.reveal .mark {
-  animation: fade-in 1.2s var(--ease-out) backwards;
-  animation-delay: calc(var(--i, 0) * 120ms + 120ms);
 }
 
 /* ---------- Sub pages (games placeholder) ---------------------------------- */
@@ -531,14 +527,8 @@ a {
   aspect-ratio: 16 / 9;
   margin: 0;
   border-radius: calc(var(--u) * 40 + 6px);
-  /* every part of the glass scales with --glass (0 = invisible, 1 = full), so the
-     load-in can build the glass up smoothly without fading the element itself */
-  background: linear-gradient(180deg, rgb(40 120 205 / calc(0.34 * var(--glass))), rgb(0 62 140 / calc(0.42 * var(--glass))));
-  border: 1px solid rgb(255 255 255 / calc(0.34 * var(--glass)));
-  box-shadow: 0 calc(var(--u) * 24) calc(var(--u) * 60) rgb(8 52 100 / calc(0.18 * var(--glass))),
-    inset 0 1px 0 rgb(255 255 255 / calc(0.22 * var(--glass)));
-  -webkit-backdrop-filter: blur(calc(16px * var(--glass))) saturate(calc(1 + 0.2 * var(--glass)));
-  backdrop-filter: blur(calc(16px * var(--glass))) saturate(calc(1 + 0.2 * var(--glass)));
+  /* flat rounded rect: one solid colour, no border, gradient, shadow or blur */
+  background: var(--card);
 }
 
 .panel .mark {
@@ -568,7 +558,7 @@ a {
   line-height: 1.2;
   color: var(--ink-dark);
   text-decoration: none;
-  background: rgb(255 255 255 / 0.92);
+  background: var(--cream);
   border-radius: 999px;
   box-shadow: 0 calc(var(--u) * 18) calc(var(--u) * 50) rgb(8 52 100 / 0.22);
   transition: transform 0.5s var(--ease-out), background-color 0.3s var(--ease-soft),
@@ -577,11 +567,11 @@ a {
 
 .button:hover {
   transform: translateY(-2px);
-  background: #fff;
+  background: #fffcf3;
 }
 
 .button:focus-visible {
-  outline: 3px solid #fff;
+  outline: 3px solid var(--cream);
   outline-offset: 4px;
   box-shadow: 0 0 0 8px rgb(0 60 130 / 0.45);
 }
@@ -617,7 +607,7 @@ a {
 }
 
 .back:focus-visible {
-  outline: 2px solid #fff;
+  outline: 2px solid var(--cream);
   outline-offset: 4px;
 }
 
@@ -669,6 +659,11 @@ a {
 
   .projects__title {
     font-size: clamp(19px, 5.4vw, 24px);
+  }
+
+  .projects::before {
+    width: 190vw;
+    height: calc(100% + 300px);
   }
 
   .tiles {
@@ -754,7 +749,7 @@ a {
   .stage::after,
   .wordmark,
   .reveal,
-  .reveal .mark {
+  .projects::before {
     animation: none !important;
   }
 
