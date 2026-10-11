@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>HIDEOUT GAMES™</title>
   <meta name="description" content="Independent game developer based in Norway.">
-  <meta name="theme-color" content="#4ea4e4">
+  <meta name="theme-color" content="#fbf7ea">
   <meta name="color-scheme" content="light">
 
   <link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
@@ -22,7 +22,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="../assets/css/style.css?v=21">
+  <link rel="stylesheet" href="../assets/css/style.css?v=22">
 </head>
 <body>
   <!-- Grain for the project logos: same noise as the page, added to each logo's
@@ -56,18 +56,11 @@
     </filter>
   </svg>
   <div class="stage">
-    <div class="bg" aria-hidden="true">
-      <div class="bg__zoom">
-        <picture class="bg__photo">
-          <source type="image/webp" srcset="../assets/img/field-1440.webp 1440w, ../assets/img/field-2560.webp 2560w" sizes="100vw">
-          <img src="../assets/img/field-2560.jpg" srcset="../assets/img/field-1440.jpg 1440w, ../assets/img/field-2560.jpg 2560w" sizes="100vw" width="2560" height="1702" alt="" decoding="async" fetchpriority="high">
-        </picture>
-        <div class="bg__tint"></div>
-      </div>
-      <div class="bg__glow"></div>
-    </div>
+    <div class="bg" aria-hidden="true"></div>
+    <div class="dither dither--bottom" aria-hidden="true"></div>
 
     <main class="page">
+      <div class="dither dither--top" aria-hidden="true"></div>
       <div class="sub">
         <h1 class="panel reveal" style="--i:0"><span class="mark mark--games"><img src="../assets/img/hideout-games-white.png" width="361" height="187" alt="Hideout Games" decoding="async"></span></h1>
         <p class="sub__lead reveal" style="--i:1">Our games page is on its way. In the meantime, you can find our game on Steam.</p>
