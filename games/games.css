@@ -7,7 +7,8 @@
      .games    one <section class="game game--<slug>"> per game; each brings
                its own theme, with dithered edges that pick up the colour of
                whatever sits above / below it
-     .footer   skyline art from the design + text + giant HIDEOUT wordmark
+     .footer   black band, then the skyline art from the design + text +
+               giant HIDEOUT wordmark
    ========================================================================== */
 
 :root {
@@ -288,7 +289,7 @@ a {
   --game-mask-top: none;
   --game-edge-top-h: 480px;
   --game-gap-top: 480px;
-  /* Bottom: the grass dithers out into the footer art's own fade. */
+  /* Bottom: the grass dithers out into the footer's black band. */
   --game-edge-bottom: var(--bb-grass);
 
   color: var(--bb-ink);
@@ -502,29 +503,23 @@ a {
    ========================================================================== */
 
 .footer {
+  --footer-black: #000;
   position: relative;
-  /* The top of the art is transparent, then fades through a pale glow into the
-     purple sky. Pull it up under the game's bottom band so the band ends where
-     the art is already half-opaque (35% down): the dithered pixels cover the
-     glow and hand over straight into the purple. This margin collapses with
-     the section's margin-bottom; footer height = max(66.25vw, min-height). */
-  margin-top: calc(-0.35 * max(66.25vw, 560px));
+  /* Starts right under the last game section (this margin collapses with the
+     section's margin-bottom), so the game's bottom band dithers out over the
+     black padding; the art then sits whole on black below it. */
+  margin-top: calc(var(--edge) * -1);
+  padding-top: calc(var(--edge) + 40px);
+  background: var(--footer-black);
+  color: var(--cream);
+}
+
+.footer__stage {
+  position: relative;
   width: 100%;               /* explicit, or min-height would widen it via the ratio */
   aspect-ratio: 2560 / 1696;
   min-height: 560px;
   overflow: hidden;
-  color: var(--cream);
-}
-
-/* Behind the last game's bottom band: the art's colour at 35% down, so the gaps
-   in the dither show lavender instead of the art's pale glow above that row. */
-.footer::after {
-  content: "";
-  position: absolute;
-  inset-inline: 0;
-  top: calc(35% - var(--edge));
-  height: var(--edge);
-  background: #b791f3;
 }
 
 .footer__art {
