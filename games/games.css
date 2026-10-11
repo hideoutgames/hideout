@@ -1,0 +1,571 @@
+/* ==========================================================================
+   Hideout Games — one-page site (/games)
+   --------------------------------------------------------------------------
+   Page (top -> bottom), each part flowing straight into the next:
+     .hero     eye logo + title over a tinted, scan-lined night sky that fades
+               into solid --night
+     .games    one <section class="game game--<slug>"> per game; each brings
+               its own theme, with dithered edges that pick up the colour of
+               whatever sits above / below it
+     .footer   dark grey band, then the skyline art from the design + text +
+               giant HIDEOUT wordmark
+   ========================================================================== */
+
+:root {
+  --cream: #fffeef;
+  --brand: #4541d9;         /* eyes + title blue from the design */
+  --night: #0f0636;         /* the hero fades into this; game bands start from it */
+
+  /* Height of a dithered edge. Must match the dither mask PNGs:
+     img/dither-in.png / dither-out.png are 32x160 (Bayer 8x8, 4px cells). */
+  --edge: 160px;
+
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  background: var(--cream);
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--cream);
+  color: var(--brand);
+  font-family: "Outfit", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+img,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+a {
+  color: inherit;
+}
+
+/* ---------- Reveal on scroll (only when JS is running) -------------------- */
+
+.js .reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  transition:
+    opacity 0.9s var(--ease-out) calc(var(--i, 0) * 90ms),
+    transform 0.9s var(--ease-out) calc(var(--i, 0) * 90ms);
+}
+
+.js .reveal.is-in {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .js .reveal {
+    transform: none;
+    transition: opacity 0.4s linear;
+  }
+}
+
+/* ==========================================================================
+   Hero
+   ========================================================================== */
+
+.hero {
+  position: relative;
+  isolation: isolate;
+  min-height: clamp(560px, 92svh, 1040px);
+  display: grid;
+  place-items: center;
+  padding: 96px 24px 140px;
+  background: var(--night);
+  color: var(--cream);
+  text-align: center;
+}
+
+/* Photo stack: night base, photo screened on top (its blacks become night),
+   then one multiplied layer that tints it purple and adds the scan lines and a
+   vignette. The stack fades into the plain night colour at the bottom. */
+.hero__photo {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  background: var(--night);
+  -webkit-mask: linear-gradient(#000 45%, transparent 100%);
+  mask: linear-gradient(#000 45%, transparent 100%);
+}
+
+.hero__photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 35%;
+  mix-blend-mode: screen;
+  filter: saturate(0.7) contrast(1.1);
+}
+
+.hero__photo::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  mix-blend-mode: multiply;
+  background:
+    repeating-linear-gradient(to bottom, rgba(15, 6, 54, 0.4) 0 1px, transparent 1px 3px),
+    radial-gradient(120% 90% at 50% 40%, transparent 40%, rgba(15, 6, 54, 0.7) 100%),
+    #c2b0ff;
+}
+
+.hero__inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.hero__eyes {
+  width: clamp(76px, 7.5vw, 124px);
+  height: auto;
+  color: currentColor;
+  margin-bottom: clamp(26px, 3vw, 44px);
+}
+
+.hero__title {
+  margin: 0;
+  font-weight: 800;
+  font-size: clamp(30px, 4.2vw, 68px);
+  line-height: 1;
+  letter-spacing: 0.005em;
+  text-shadow: 0 2px 30px rgba(15, 6, 54, 0.6);
+}
+
+.tm {
+  font-size: 0.42em;
+  font-weight: 700;
+  vertical-align: 1.05em;
+  margin-left: 0.06em;
+}
+
+.hero__lead {
+  margin: 18px 0 0;
+  font-size: clamp(16px, 1.35vw, 21px);
+  font-weight: 500;
+  opacity: 0.85;
+  text-shadow: 0 1px 18px rgba(15, 6, 54, 0.8);
+}
+
+/* Plain "Scroll" cue with a gently bobbing arrow under it (not a button). */
+.hero__scroll {
+  margin-top: clamp(40px, 5vw, 64px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-decoration: none;
+  opacity: 0.8;
+  transition: opacity 0.2s;
+}
+
+.hero__scroll svg {
+  width: 18px;
+  height: 18px;
+  animation: bob 2.2s ease-in-out infinite;
+}
+
+.hero__scroll:hover,
+.hero__scroll:focus-visible {
+  opacity: 1;
+}
+
+.js .hero__scroll.reveal.is-in {
+  opacity: 0.8;
+}
+
+.js .hero__scroll.reveal.is-in:hover,
+.js .hero__scroll.reveal.is-in:focus-visible {
+  opacity: 1;
+}
+
+@keyframes bob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(5px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero__scroll svg {
+    animation: none;
+  }
+}
+
+/* ==========================================================================
+   Game sections (shared)
+   --------------------------------------------------------------------------
+   A section paints --game-bg. Its ::before / ::after are bands that stick out
+   above / below it (into its top / bottom margin), painted with
+   --game-edge-top / --game-edge-bottom (default: --game-bg) and dithered out
+   through --game-mask-top / --game-mask-bottom, so the theme dissolves into
+   whatever sits next to it. A band can also be a full picture (e.g. a pixel-art
+   sky) with its mask set to "none". Band heights: --game-edge-top-h /
+   --game-edge-bottom-h; the margins that hold them: --game-gap-top / -bottom.
+   ========================================================================== */
+
+.game {
+  --game-mask-top: url("img/dither-in.png") top left / 32px var(--edge) repeat-x;
+  --game-mask-bottom: url("img/dither-out.png") top left / 32px var(--edge) repeat-x;
+  position: relative;
+  z-index: 1;               /* bands paint over the neighbouring hero / footer */
+  background: var(--game-bg, transparent);
+  /* 1px less than the band, which overlaps the section by 1px (no hairlines) */
+  margin-block:
+    calc(var(--game-gap-top, var(--edge)) - 1px)
+    calc(var(--game-gap-bottom, var(--edge)) - 1px);
+}
+
+.game::before,
+.game::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  pointer-events: none;
+}
+
+.game::before {
+  bottom: calc(100% - 1px);
+  height: var(--game-edge-top-h, var(--edge));
+  background: var(--game-edge-top, var(--game-bg));
+  -webkit-mask: var(--game-mask-top);
+  mask: var(--game-mask-top);
+}
+
+.game::after {
+  top: calc(100% - 1px);
+  height: var(--game-edge-bottom-h, var(--edge));
+  background: var(--game-edge-bottom, var(--game-bg));
+  -webkit-mask: var(--game-mask-bottom);
+  mask: var(--game-mask-bottom);
+}
+
+.game__wrap {
+  position: relative;
+  width: min(1200px, 100% - 48px);
+  margin-inline: auto;
+}
+
+/* ==========================================================================
+   Game: Boom Bears on Stream
+   Palette sampled from the key art and logo.
+   ========================================================================== */
+
+.game--boom-bears {
+  --bb-sky: linear-gradient(90deg, #86eae2 0%, #a9f1ed 50%, #9ceee8 100%);
+  --bb-ink: #140d1f;
+  --bb-pink: #e5336d;
+  --bb-teal: #18e7d9;
+  --bb-lavender: #baafdc;
+  --bb-lavender-dark: #a196c3;
+  --bb-grass: #00e759;
+
+  --game-bg: var(--bb-grass);    /* the sky is painted by .game__wrap */
+  /* Top: a pixel-art band that starts at the hero's night colour and dithers
+     through dark purple and purple into blue and the day sky. */
+  --game-edge-top: url("boom-bears/sky-in.png") top left / 1024px 480px repeat-x, var(--bb-sky);
+  --game-mask-top: none;
+  --game-edge-top-h: 480px;
+  --game-gap-top: 480px;
+  /* Bottom: the grass dithers out into the footer's dark grey band. */
+  --game-edge-bottom: var(--bb-grass);
+
+  color: var(--bb-ink);
+  font-family: "Fredoka", "Outfit", system-ui, sans-serif;
+}
+
+.game--boom-bears {
+  padding-bottom: 28px;
+}
+
+.game--boom-bears .game__wrap {
+  width: auto;
+  padding: 24px max(24px, (100% - 1200px) / 2) 40px;
+  background: var(--bb-sky);
+}
+
+.bb-intro {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+  align-items: center;
+  gap: clamp(24px, 4vw, 64px);
+}
+
+.bb-logo {
+  justify-self: center;
+  width: min(100%, 400px);
+  height: auto;
+  filter: drop-shadow(0 14px 0 rgba(29, 16, 48, 0.12));
+}
+
+/* The copy sits on a white plate (same chunky outline as the cards) so it
+   reads cleanly against the bright sky. */
+.bb-copy {
+  padding: clamp(24px, 3vw, 40px);
+  border: 4px solid var(--bb-ink);
+  border-radius: 28px;
+  background: #fff;
+  box-shadow: 0 10px 0 var(--bb-ink);
+}
+
+.bb-title {
+  margin: 0;
+  font-weight: 700;
+  font-size: clamp(32px, 3.6vw, 54px);
+  line-height: 1.02;
+  letter-spacing: -0.005em;
+}
+
+.bb-text {
+  margin: 18px 0 0;
+  max-width: 34em;
+  font-size: clamp(17px, 1.3vw, 20px);
+  font-weight: 500;
+  line-height: 1.45;
+}
+
+.bb-button {
+  margin-top: 28px;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 26px 15px;
+  border: 3px solid var(--bb-ink);
+  border-radius: 999px;
+  background: var(--bb-pink);
+  color: #fff;
+  font-size: 20px;
+  font-weight: 600;
+  text-decoration: none;
+  box-shadow: 0 6px 0 var(--bb-ink);
+  transition: transform 0.15s, box-shadow 0.15s, background-color 0.2s;
+}
+
+.bb-button svg {
+  width: 18px;
+  height: 18px;
+  transition: transform 0.2s var(--ease-out);
+}
+
+.bb-button:hover,
+.bb-button:focus-visible {
+  background: #f0447c;
+}
+
+.bb-button:hover svg,
+.bb-button:focus-visible svg {
+  transform: translateX(3px);
+}
+
+.bb-button:active {
+  transform: translateY(4px);
+  box-shadow: 0 2px 0 var(--bb-ink);
+}
+
+.bb-button:focus-visible {
+  outline: 3px solid var(--bb-ink);
+  outline-offset: 4px;
+}
+
+/* Screenshot cards: chunky outlined plates like the logo's lavender badge. */
+.bb-modes {
+  margin-top: clamp(48px, 6vw, 88px);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(24px, 3.5vw, 48px);
+}
+
+.bb-card {
+  margin: 0;
+  padding: 12px 12px 18px;
+  border: 4px solid var(--bb-ink);
+  border-radius: 28px;
+  background:
+    radial-gradient(circle at 50% 50%, var(--bb-lavender-dark) 0 2.5px, transparent 3px) 0 0 / 14px 14px,
+    var(--bb-lavender);
+  box-shadow: 0 10px 0 var(--bb-ink);
+  transform: rotate(-1.2deg);
+  transition: transform 0.35s var(--ease-out);
+}
+
+.bb-card--words {
+  transform: rotate(1.2deg);
+}
+
+.js .bb-card.reveal { transform: translateY(18px) rotate(-1.2deg); }
+.js .bb-card--words.reveal { transform: translateY(18px) rotate(1.2deg); }
+.js .bb-card.reveal.is-in { transform: rotate(-1.2deg); }
+.js .bb-card--words.reveal.is-in { transform: rotate(1.2deg); }
+.js .bb-card.reveal.is-in:hover { transform: rotate(0deg) scale(1.015); transition-delay: 0s; }
+
+.bb-card__shot {
+  overflow: hidden;
+  border: 4px solid var(--bb-ink);
+  border-radius: 18px;
+  aspect-ratio: 16 / 9;
+  background: var(--bb-ink);
+}
+
+.bb-card__shot img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.bb-card figcaption {
+  padding: 14px 8px 0;
+  font-size: 17px;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+/* Outlined bubble titles, like BOOM / BEARS in the logo. */
+.bb-card figcaption b {
+  display: block;
+  margin-bottom: 4px;
+  font-size: clamp(26px, 2.4vw, 34px);
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--bb-pink);
+  -webkit-text-stroke: 6px var(--bb-ink);
+  paint-order: stroke fill;
+  text-shadow: 0 4px 0 var(--bb-ink);
+}
+
+.bb-card--words figcaption b {
+  color: var(--bb-teal);
+}
+
+/* Landscape strip at the bottom: its sky melts into the section's sky above,
+   its foreground melts into the grass below, which then dithers out into the
+   cream page (the section's bottom edge). */
+.bb-landscape {
+  position: relative;
+}
+
+.bb-landscape img {
+  width: 100%;
+  height: clamp(320px, 32.3vw, 720px);
+  object-fit: cover;
+  object-position: 60% 100%;
+  -webkit-mask: linear-gradient(#000 75%, transparent);
+  mask: linear-gradient(#000 75%, transparent);
+}
+
+.bb-landscape::after {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 10%;
+  background: var(--bb-sky);
+  -webkit-mask: linear-gradient(#000, transparent);
+  mask: linear-gradient(#000, transparent);
+}
+
+@media (max-width: 860px) {
+  .hero__photo img {
+    object-position: 50% 70%;
+  }
+  .bb-intro,
+  .bb-modes {
+    grid-template-columns: 1fr;
+  }
+  .bb-logo {
+    max-width: 420px;
+    margin-inline: auto;
+  }
+}
+
+/* ==========================================================================
+   Footer — 1:1 with the design (2560 x 1696 art; positions in % of it)
+   ========================================================================== */
+
+.footer {
+  --footer-bg: #1c1c1c;     /* very dark grey */
+  position: relative;
+  /* Starts right under the last game section (this margin collapses with the
+     section's margin-bottom), so the game's bottom band dithers out over the
+     dark grey padding; the art then sits whole on that grey below it. */
+  margin-top: calc(var(--edge) * -1);
+  padding-top: calc(var(--edge) + 40px);
+  background: var(--footer-bg);
+  color: var(--cream);
+}
+
+.footer__stage {
+  position: relative;
+  width: 100%;               /* explicit, or min-height would widen it via the ratio */
+  aspect-ratio: 2560 / 1696;
+  min-height: 560px;
+  overflow: hidden;
+}
+
+.footer__art {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  object-fit: cover;
+  object-position: center bottom;
+}
+
+.footer__text {
+  position: absolute;
+  inset-inline: 0;
+  top: 74.5%;
+  padding-inline: 24px;
+  text-align: center;
+  font-size: clamp(12px, 1vw, 26px);
+  font-weight: 500;
+  line-height: 1.75;
+}
+
+.footer__text p {
+  margin: 0;
+}
+
+.footer__text a {
+  text-decoration: none;
+}
+
+.footer__text a:hover,
+.footer__text a:focus-visible {
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+/* Giant cut-off HIDEOUT, drawn in cream through the wordmark's alpha; always
+   spans the full width so the whole word shows on phones too. */
+.footer__wordmark {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  aspect-ratio: 2560 / 204;
+  background: var(--cream);
+  -webkit-mask: url("img/hideout-wordmark.png") center / 100% 100% no-repeat;
+  mask: url("img/hideout-wordmark.png") center / 100% 100% no-repeat;
+}
