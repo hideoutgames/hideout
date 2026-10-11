@@ -317,12 +317,14 @@ a {
   place-items: center;
   height: calc(var(--u) * 340);
   border-radius: calc(var(--u) * 36);
-  background: linear-gradient(180deg, rgb(40 120 205 / 0.34), rgb(0 62 140 / 0.42));
-  border: 1px solid rgb(255 255 255 / 0.34);
-  box-shadow: 0 calc(var(--u) * 24) calc(var(--u) * 60) rgb(8 52 100 / 0.18),
-    inset 0 1px 0 rgb(255 255 255 / 0.22);
-  -webkit-backdrop-filter: blur(16px) saturate(1.2);
-  backdrop-filter: blur(16px) saturate(1.2);
+  /* every part of the glass scales with --glass (0 = invisible, 1 = full), so the
+     load-in can build the glass up smoothly without fading the element itself */
+  background: linear-gradient(180deg, rgb(40 120 205 / calc(0.34 * var(--glass))), rgb(0 62 140 / calc(0.42 * var(--glass))));
+  border: 1px solid rgb(255 255 255 / calc(0.34 * var(--glass)));
+  box-shadow: 0 calc(var(--u) * 24) calc(var(--u) * 60) rgb(8 52 100 / calc(0.18 * var(--glass))),
+    inset 0 1px 0 rgb(255 255 255 / calc(0.22 * var(--glass)));
+  -webkit-backdrop-filter: blur(calc(16px * var(--glass))) saturate(calc(1 + 0.2 * var(--glass)));
+  backdrop-filter: blur(calc(16px * var(--glass))) saturate(calc(1 + 0.2 * var(--glass)));
   text-decoration: none;
   transition: transform 0.5s var(--ease-out), background-color 0.4s var(--ease-soft),
     border-color 0.4s var(--ease-soft), box-shadow 0.5s var(--ease-out);
@@ -463,12 +465,49 @@ a {
   animation-delay: calc(var(--i, 0) * 120ms + 120ms);
 }
 
-/* Glass cards fade themselves (never a fading parent: that would stop their
-   backdrop blur from rendering until the fade ends), and only hold the start
-   frame, so nothing lingers afterwards to block the blur or the hover lift. */
+/* Glass cards never fade with opacity: browsers either drop the backdrop blur
+   while an element (or its parent) is translucent, or ignore the opacity for the
+   blurred backdrop, so the glass popped in. Instead the glass itself builds up
+   (--glass 0 -> 1: blur, tint, border, shadow) as the card rises, and the logo
+   fades in on its own. Fill-mode backwards: nothing lingers afterwards to block
+   the hover lift. */
+@property --glass {
+  syntax: "<number>";
+  inherits: false;
+  initial-value: 1;
+}
+
+@keyframes glass-in {
+  from {
+    --glass: 0;
+    transform: translate3d(0, calc(var(--u) * 28 + 6px), 0);
+  }
+  to {
+    --glass: 1;
+    transform: none;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
 .tile.reveal,
 .panel.reveal {
+  animation-name: glass-in;
+  animation-duration: 1.2s;
   animation-fill-mode: backwards;
+}
+
+.tile.reveal .mark,
+.panel.reveal .mark {
+  animation: fade-in 1.2s var(--ease-out) backwards;
+  animation-delay: calc(var(--i, 0) * 120ms + 120ms);
 }
 
 /* ---------- Sub pages (games placeholder) ---------------------------------- */
@@ -492,12 +531,14 @@ a {
   aspect-ratio: 16 / 9;
   margin: 0;
   border-radius: calc(var(--u) * 40 + 6px);
-  background: linear-gradient(180deg, rgb(40 120 205 / 0.34), rgb(0 62 140 / 0.42));
-  border: 1px solid rgb(255 255 255 / 0.34);
-  box-shadow: 0 calc(var(--u) * 24) calc(var(--u) * 60) rgb(8 52 100 / 0.18),
-    inset 0 1px 0 rgb(255 255 255 / 0.22);
-  -webkit-backdrop-filter: blur(16px) saturate(1.2);
-  backdrop-filter: blur(16px) saturate(1.2);
+  /* every part of the glass scales with --glass (0 = invisible, 1 = full), so the
+     load-in can build the glass up smoothly without fading the element itself */
+  background: linear-gradient(180deg, rgb(40 120 205 / calc(0.34 * var(--glass))), rgb(0 62 140 / calc(0.42 * var(--glass))));
+  border: 1px solid rgb(255 255 255 / calc(0.34 * var(--glass)));
+  box-shadow: 0 calc(var(--u) * 24) calc(var(--u) * 60) rgb(8 52 100 / calc(0.18 * var(--glass))),
+    inset 0 1px 0 rgb(255 255 255 / calc(0.22 * var(--glass)));
+  -webkit-backdrop-filter: blur(calc(16px * var(--glass))) saturate(calc(1 + 0.2 * var(--glass)));
+  backdrop-filter: blur(calc(16px * var(--glass))) saturate(calc(1 + 0.2 * var(--glass)));
 }
 
 .panel .mark {
@@ -712,7 +753,8 @@ a {
   .stage::before,
   .stage::after,
   .wordmark,
-  .reveal {
+  .reveal,
+  .reveal .mark {
     animation: none !important;
   }
 
