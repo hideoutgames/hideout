@@ -93,6 +93,8 @@ a {
   --wm-w: max(100vw, 900px);
   --wm-h: calc(var(--wm-w) * 0.0797);
   --wm-vis: min(var(--wm-h), calc(var(--u) * 204));
+  /* how far the grass dither rises above the top of the giant wordmark */
+  --grass-rise: calc(var(--u) * 150);
 }
 
 /* ---------- Background ---------------------------------------------------- */
@@ -180,8 +182,8 @@ a {
   flex-direction: column;
   align-items: center;
   text-align: center;
-  --hero-top: calc(var(--u) * 290);
-  --title-reach: calc(var(--u) * 330); /* clouds fade out behind the title and subtitle */
+  --hero-top: calc(var(--u) * 292);
+  --title-reach: calc(var(--u) * 20); /* clouds dissolve just as they reach the title */
   padding: var(--hero-top) 24px 0;
 }
 
@@ -204,7 +206,8 @@ a {
 .dither--top {
   top: 0;
   height: calc(var(--hero-top) + var(--title-reach));
-  background: url("../img/dither-top.png") center bottom / 3200px 680px no-repeat;
+  /* the dither scales with the area (height-fit, always wider than the screen) */
+  background: url("../img/dither-top.png") center bottom / auto 100% no-repeat;
 }
 
 /* Bottom: grass builds up from cream to a dense field at the bottom edge, where
@@ -213,8 +216,8 @@ a {
 .dither--bottom {
   z-index: 0;
   bottom: 0;
-  height: 520px; /* grass rises up behind the lower edge of the cards */
-  background: url("../img/dither-bottom.png") center bottom / 3200px 520px no-repeat;
+  height: calc(var(--wm-vis) + var(--grass-rise));
+  background: url("../img/dither-bottom.png") center bottom / auto 100% no-repeat;
 }
 
 .title,
@@ -280,7 +283,7 @@ a {
 
 .projects {
   position: relative;
-  margin-top: calc(var(--u) * 195);
+  margin-top: calc(var(--u) * 132);
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -351,7 +354,7 @@ a {
 /* ---------- Contact --------------------------------------------------------- */
 
 .contact {
-  margin-top: calc(var(--u) * 180);
+  margin-top: calc(var(--u) * 100);
   display: inline-block;
   padding: calc(var(--u) * 8) calc(var(--u) * 60);
   font-weight: 500;
@@ -360,9 +363,6 @@ a {
   color: var(--ink-dark);
   text-decoration: none;
   white-space: nowrap;
-  /* flat cream backing (like the cards) keeps it clean over the dither */
-  background: var(--cream);
-  border-radius: 10px;
   transition: opacity 0.3s var(--ease-soft);
 }
 
@@ -386,7 +386,7 @@ a {
 .footer {
   /* sits directly under the contact pill; the spare room falls below it, above the wordmark */
   margin-top: calc(var(--u) * 14);
-  padding: calc(var(--u) * 6) 24px calc(var(--wm-vis) + 6px);
+  padding: calc(var(--u) * 6) 24px calc(var(--wm-vis) + var(--grass-rise) + var(--u) * 24);
   text-align: center;
   font-size: clamp(11px, calc(var(--u) * 19), 22px);
   line-height: 1.4;
@@ -394,18 +394,9 @@ a {
   text-wrap: balance;
 }
 
-/* Text that can land on the grass dither sits on flat cream backings (like the
-   cards), so it stays clean and legible. */
-.footer p,
-.back {
-  background: var(--cream);
-  border-radius: 10px;
-}
-
 .footer p {
   margin: 0;
   display: inline-block;
-  padding: 0.3em 1em;
 }
 
 .wordmark {
@@ -565,7 +556,7 @@ a {
 .back {
   margin-top: calc(var(--u) * 48 + 6px);
   display: inline-block;
-  padding: 0.4em 0.9em;
+  padding: 0.4em 0.3em;
   font-size: clamp(14px, calc(var(--u) * 30), 56px);
   font-weight: 500;
   color: var(--ink-dark);
@@ -606,6 +597,7 @@ a {
   .stage {
     min-height: 100svh;
     --wm-w: 112vw;
+    --grass-rise: 70px;
   }
 
   /* Three-part composition that fills the screen:
@@ -673,29 +665,16 @@ a {
     font-size: 11px;
     line-height: 1.45;
     margin-top: 6px;
-    padding: 0 0 calc(var(--wm-vis) + 16px);
+    padding: 0 0 calc(var(--wm-vis) + var(--grass-rise) + 14px);
     max-width: 320px;
     align-self: center;
   }
 
 
-  .footer p {
-    padding: 0.35em 0.9em;
-  }
-
   .page {
-    --title-reach: 150px;
+    --title-reach: 10px;
   }
 
-  /* phones: finer dither (1 CSS px dots, still 2-3 device px) at half the height */
-  .dither--top {
-    background-size: 1600px 340px;
-  }
-
-  .dither--bottom {
-    height: 260px;
-    background-size: 1600px 260px;
-  }
 
   /* Games page */
   .sub {
