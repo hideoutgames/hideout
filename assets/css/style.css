@@ -180,8 +180,8 @@ a {
   flex-direction: column;
   align-items: center;
   text-align: center;
-  --hero-top: calc(var(--u) * 440);
-  --title-reach: calc(var(--u) * 105); /* how far the cloud dither reaches into the title */
+  --hero-top: calc(var(--u) * 290);
+  --title-reach: calc(var(--u) * 330); /* clouds fade out behind the title and subtitle */
   padding: var(--hero-top) 24px 0;
 }
 
@@ -204,7 +204,7 @@ a {
 .dither--top {
   top: 0;
   height: calc(var(--hero-top) + var(--title-reach));
-  background: url("../img/dither-top.png") center bottom / 3200px 600px no-repeat;
+  background: url("../img/dither-top.png") center bottom / 3200px 680px no-repeat;
 }
 
 /* Bottom: grass builds up from cream to a dense field at the bottom edge, where
@@ -213,8 +213,8 @@ a {
 .dither--bottom {
   z-index: 0;
   bottom: 0;
-  height: 360px;
-  background: url("../img/dither-bottom.png") center bottom / 3200px 360px no-repeat;
+  height: 520px; /* grass rises up behind the lower edge of the cards */
+  background: url("../img/dither-bottom.png") center bottom / 3200px 520px no-repeat;
 }
 
 .title,
@@ -234,7 +234,7 @@ a {
   line-height: 1;
   letter-spacing: 0.008em;
   color: var(--ink-dark);
-  text-shadow: none;
+  text-shadow: var(--text-shadow); /* cream halo over the cloud dots */
 }
 
 /* Trademark mark hangs off the right edge so the word itself stays centred,
@@ -257,7 +257,7 @@ a {
   font-size: clamp(17px, calc(var(--u) * 51), 120px);
   line-height: 1.2;
   color: var(--ink-dark);
-  text-shadow: none;
+  text-shadow: var(--text-shadow);
   display: inline-flex;
   align-items: center;
   gap: 0.28em;
@@ -280,7 +280,7 @@ a {
 
 .projects {
   position: relative;
-  margin-top: calc(var(--u) * 110);
+  margin-top: calc(var(--u) * 195);
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -293,7 +293,7 @@ a {
   font-size: clamp(22px, calc(var(--u) * 64), 150px);
   line-height: 1.1;
   color: var(--ink-dark);
-  text-shadow: none; /* sits on the cream glow, no shadow needed */
+  text-shadow: var(--text-shadow);
 }
 
 .tiles {
@@ -351,7 +351,7 @@ a {
 /* ---------- Contact --------------------------------------------------------- */
 
 .contact {
-  margin-top: calc(var(--u) * 120);
+  margin-top: calc(var(--u) * 180);
   display: inline-block;
   padding: calc(var(--u) * 8) calc(var(--u) * 60);
   font-weight: 500;
@@ -615,7 +615,7 @@ a {
      contact pair, which stays right above the wordmark. On short screens the gap
      collapses to its minimum and the page simply scrolls. */
   .page {
-    --hero-top: calc(env(safe-area-inset-top, 0px) + clamp(110px, 24svh, 240px));
+    --hero-top: calc(env(safe-area-inset-top, 0px) + clamp(70px, 14svh, 150px));
     padding: var(--hero-top) max(20px, env(safe-area-inset-right, 0px)) 0 max(20px, env(safe-area-inset-left, 0px));
   }
 
@@ -684,17 +684,17 @@ a {
   }
 
   .page {
-    --title-reach: 28px;
+    --title-reach: 150px;
   }
 
   /* phones: finer dither (1 CSS px dots, still 2-3 device px) at half the height */
   .dither--top {
-    background-size: 1600px 300px;
+    background-size: 1600px 340px;
   }
 
   .dither--bottom {
-    height: 180px;
-    background-size: 1600px 180px;
+    height: 260px;
+    background-size: 1600px 260px;
   }
 
   /* Games page */
