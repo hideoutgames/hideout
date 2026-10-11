@@ -182,8 +182,9 @@ a {
   flex-direction: column;
   align-items: center;
   text-align: center;
-  --hero-top: calc(var(--u) * 292);
-  --title-reach: calc(var(--u) * 20); /* clouds dissolve just as they reach the title */
+  /* the cloud area's height is fixed independently of where the title sits */
+  --clouds-h: calc(var(--u) * 312);
+  --hero-top: calc(var(--u) * 182);
   padding: var(--hero-top) 24px 0;
 }
 
@@ -205,7 +206,7 @@ a {
 
 .dither--top {
   top: 0;
-  height: calc(var(--hero-top) + var(--title-reach));
+  height: var(--clouds-h);
   /* the dither scales with the area (height-fit, always wider than the screen) */
   background: url("../img/dither-top.png") center bottom / auto 100% no-repeat;
 }
@@ -354,7 +355,7 @@ a {
 /* ---------- Contact --------------------------------------------------------- */
 
 .contact {
-  margin-top: calc(var(--u) * 100);
+  margin-top: calc(var(--u) * 210); /* keeps the footer where it was */
   display: inline-block;
   padding: calc(var(--u) * 8) calc(var(--u) * 60);
   font-weight: 500;
@@ -607,7 +608,8 @@ a {
      contact pair, which stays right above the wordmark. On short screens the gap
      collapses to its minimum and the page simply scrolls. */
   .page {
-    --hero-top: calc(env(safe-area-inset-top, 0px) + clamp(70px, 14svh, 150px));
+    --clouds-h: calc(env(safe-area-inset-top, 0px) + clamp(70px, 14svh, 150px) + 10px);
+    --hero-top: calc(env(safe-area-inset-top, 0px) + clamp(36px, 8svh, 90px));
     padding: var(--hero-top) max(20px, env(safe-area-inset-right, 0px)) 0 max(20px, env(safe-area-inset-left, 0px));
   }
 
@@ -672,7 +674,6 @@ a {
 
 
   .page {
-    --title-reach: 10px;
   }
 
 
