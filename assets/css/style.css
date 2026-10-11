@@ -234,7 +234,26 @@ a {
   flex-direction: column;
   align-items: center;
   text-align: center;
-  padding: calc(var(--u) * 239) 24px 0;
+  --hero-top: calc(var(--u) * 450);
+  padding: var(--hero-top) 24px 0;
+}
+
+/* Two-tone (ink on cream) ordered-dither photo across the top of the page. The
+   dither itself fades to pure cream at the image's bottom edge, which is pinned
+   just above the title; on short headers the top of the image is cropped. Each
+   dither dot is 2 CSS px, drawn crisp. */
+.dither {
+  position: absolute;
+  z-index: 3; /* over the cream band, under the page grain (z 50) */
+  top: 0;
+  left: 50%;
+  width: 100vw;
+  height: calc(var(--hero-top) - var(--u) * 10);
+  translate: -50% 0;
+  pointer-events: none;
+  background: url("../img/dither-top.png") center bottom / 3200px 400px no-repeat;
+  image-rendering: pixelated;
+  animation: fade-in 1.6s var(--ease-out) 0.15s both;
 }
 
 .title,
@@ -247,13 +266,43 @@ a {
   text-shadow: var(--text-shadow);
 }
 
+/* Header: cream from the top of the page down past "Made in Norway", then a
+   soft feather (same as the Projects band), so the top reads as part of the
+   same cream section. Title and subtitle are dark ink on it. */
+.hero {
+  --band-feather: calc(var(--u) * 150);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.hero::before {
+  content: "";
+  position: absolute;
+  z-index: 2;
+  left: 50%;
+  top: -100vh; /* runs up past the top edge; the stage clips it */
+  bottom: calc(var(--u) * -60 - var(--band-feather));
+  width: 100vw;
+  translate: -50% 0;
+  pointer-events: none;
+  background: linear-gradient(to top,
+      rgb(251 247 234 / 0) 0,
+      rgb(251 247 234 / 0.35) calc(var(--band-feather) * 0.45),
+      rgb(251 247 234 / 0.8) calc(var(--band-feather) * 0.8),
+      var(--cream) var(--band-feather));
+  animation: fade-in 1.6s var(--ease-out) 0.15s both;
+}
+
 .title {
   margin: 0;
   font-weight: 700;
   font-size: clamp(52px, calc(var(--u) * 158), 360px);
   line-height: 1;
   letter-spacing: 0.008em;
-  color: var(--ink-light);
+  color: var(--ink-dark);
+  text-shadow: none;
 }
 
 /* Trademark mark hangs off the right edge so the word itself stays centred,
@@ -275,7 +324,8 @@ a {
   font-weight: 400;
   font-size: clamp(17px, calc(var(--u) * 51), 120px);
   line-height: 1.2;
-  color: var(--ink-light);
+  color: var(--ink-dark);
+  text-shadow: none;
   display: inline-flex;
   align-items: center;
   gap: 0.28em;
@@ -288,8 +338,8 @@ a {
   width: 1.1em; /* 22:16 */
   height: 0.8em;
   border-radius: 0.12em;
-  /* hairline edge + the same drop shadow as the white text */
-  box-shadow: 0 0 0 1px rgb(251 247 234 / 0.25), var(--text-shadow);
+  /* hairline edge only: it sits on cream now */
+  box-shadow: 0 0 0 1px rgb(43 43 43 / 0.08);
   flex: none;
   translate: 0 -0.03em; /* measured: centres the flag on the capital letters */
 }
@@ -301,7 +351,7 @@ a {
   --band-pad: calc(var(--u) * 90);
   --band-feather: calc(var(--u) * 150);
   position: relative; /* anchors the cream band; no z-index, so the band can sit under the grain */
-  margin-top: calc(var(--u) * 158);
+  margin-top: calc(var(--u) * 110);
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -398,7 +448,7 @@ a {
 /* ---------- Contact --------------------------------------------------------- */
 
 .contact {
-  margin-top: calc(var(--u) * 268);
+  margin-top: calc(var(--u) * 120);
   display: inline-block;
   padding: calc(var(--u) * 8) calc(var(--u) * 60);
   font-weight: 500;
@@ -660,8 +710,8 @@ a {
      contact pair, which stays right above the wordmark. On short screens the gap
      collapses to its minimum and the page simply scrolls. */
   .page {
-    padding: calc(env(safe-area-inset-top, 0px) + clamp(40px, 12svh, 120px))
-      max(20px, env(safe-area-inset-right, 0px)) 0 max(20px, env(safe-area-inset-left, 0px));
+    --hero-top: calc(env(safe-area-inset-top, 0px) + clamp(110px, 24svh, 240px));
+    padding: var(--hero-top) max(20px, env(safe-area-inset-right, 0px)) 0 max(20px, env(safe-area-inset-left, 0px));
   }
 
   .title {
@@ -674,7 +724,7 @@ a {
   }
 
   .projects {
-    margin-top: clamp(16px, 5svh, 56px);
+    margin-top: clamp(8px, 2svh, 24px);
     padding: 32px 0 22px;
   }
 
@@ -684,6 +734,10 @@ a {
 
   .projects {
     --band-pad: 28px;
+    --band-feather: 56px;
+  }
+
+  .hero {
     --band-feather: 56px;
   }
 
@@ -758,6 +812,7 @@ a {
 /* Short landscape screens (e.g. phones on their side): let it scroll naturally */
 @media (max-height: 520px) and (orientation: landscape) {
   .page {
+    --hero-top: 40px;
     padding-top: 40px;
   }
 }
@@ -770,6 +825,8 @@ a {
   .stage::after,
   .wordmark,
   .reveal,
+  .dither,
+  .hero::before,
   .projects::before {
     animation: none !important;
   }
