@@ -7,6 +7,7 @@
   <meta name="description" content="Independent game developer based in Norway.">
   <meta name="theme-color" content="#0f0636">
   <meta name="color-scheme" content="dark">
+  <style>html{background:#000}</style><!-- same black as games.css, for the very first paint -->
 
   <link rel="icon" href="img/favicon.svg" type="image/svg+xml">
 
@@ -22,9 +23,16 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;700;800&amp;family=Fredoka:wght@500;600;700&amp;display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="games.css?v=5">
-  <script>document.documentElement.classList.add("js")</script>
-  <style>html{background:#0f0636}</style><!-- dark first paint, before games.css arrives -->
+  <link rel="preload" as="image" href="img/hero-night-1920.jpg"
+        imagesrcset="img/hero-night-1280.jpg 1280w, img/hero-night-1920.jpg 1920w, img/hero-night-2400.jpg 2400w"
+        imagesizes="100vw" fetchpriority="high">
+  <link rel="stylesheet" href="games.css?v=6">
+  <script>
+    // JS is on: scroll reveals and the header intro (held until the sky and
+    // the title font are ready; games.js starts it, this is the safety net).
+    document.documentElement.classList.add("js");
+    setTimeout(function () { document.documentElement.classList.add("intro-go"); }, 2000);
+  </script>
 </head>
 <body>
 
@@ -70,7 +78,7 @@
     <section class="game game--boom-bears" id="boom-bears" aria-labelledby="boom-bears-title">
       <div class="game__wrap">
         <div class="bb-intro">
-          <img class="bb-logo reveal" data-reveal="pop" src="boom-bears/logo.webp" width="286" height="368" alt="Boom Bears on Stream" loading="lazy" decoding="async">
+          <img class="bb-logo reveal" data-reveal="pop" src="boom-bears/logo.webp" width="286" height="368" alt="Boom Bears on Stream" decoding="async">
           <div class="bb-copy reveal" data-reveal="rise" style="--i:1">
             <h2 class="bb-title reveal" style="--i:3" id="boom-bears-title">Let your viewers fight it out on stream.</h2>
             <p class="bb-text reveal" style="--i:4">A cute &amp; chaotic auto-battler battle royale for up to 100 players, plus a word-guessing game to find the biggest brain in chat.</p>
@@ -83,14 +91,14 @@
 
         <div class="bb-modes">
           <figure class="bb-card bb-card--battle reveal" data-reveal="from-left">
-            <div class="bb-card__shot"><img src="boom-bears/battle.jpg" width="1280" height="720" alt="Dozens of colourful bears battling on a grassy island, one just eliminated" loading="lazy" decoding="async"></div>
+            <div class="bb-card__shot"><img src="boom-bears/battle.jpg" width="1280" height="720" alt="Dozens of colourful bears battling on a grassy island, one just eliminated" decoding="async"></div>
             <figcaption>
               <b>Battle Royale</b>
               Bombs, rocket launchers and air strikes. The last bear standing is crowned champion.
             </figcaption>
           </figure>
           <figure class="bb-card bb-card--words reveal" data-reveal="from-right" style="--i:1.5">
-            <div class="bb-card__shot"><img src="boom-bears/words.jpg" width="1280" height="720" alt="Word Guesser board with shuffled letters, hidden words and a chat leaderboard" loading="lazy" decoding="async"></div>
+            <div class="bb-card__shot"><img src="boom-bears/words.jpg" width="1280" height="720" alt="Word Guesser board with shuffled letters, hidden words and a chat leaderboard" decoding="async"></div>
             <figcaption>
               <b>Word Guesser</b>
               Eight shuffled letters, ten hidden words, three rounds. Who's the biggest 5head in chat?
@@ -100,7 +108,7 @@
       </div>
 
       <div class="bb-landscape" aria-hidden="true">
-        <img src="boom-bears/landscape.jpg" width="1920" height="620" alt="" loading="lazy" decoding="async">
+        <img src="boom-bears/landscape.jpg" width="1920" height="620" alt="" decoding="async">
       </div>
     </section>
 
@@ -115,7 +123,7 @@
     <div class="footer__stage">
       <img class="footer__art" src="img/footer-skyline-1920.webp"
            srcset="img/footer-skyline-1280.webp 1280w, img/footer-skyline-1920.webp 1920w, img/footer-skyline-2560.webp 2560w"
-           sizes="100vw" width="2560" height="1696" alt="" loading="lazy" decoding="async">
+           sizes="100vw" width="2560" height="1696" alt="" decoding="async">
       <div class="footer__text">
         <p>© Bru Development ENK. Hideout™ and Hideout Games™ are trademarks of Bru Development ENK.</p>
         <p>Based in Norway. Contact at: <a href="mailto:mail@hideout.no">mail@hideout.no</a></p>
@@ -124,6 +132,6 @@
     </div>
   </footer>
 
-  <script src="games.js?v=2" defer></script>
+  <script src="games.js?v=3" defer></script>
 </body>
 </html>

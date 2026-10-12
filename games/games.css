@@ -339,6 +339,18 @@ a {
   }
 }
 
+/* Held on the first frame until games.js has the sky photo and the title font
+   ready (it adds .intro-go to <html>; an inline script in the page head adds
+   it after 2s regardless). */
+.js:not(.intro-go) .hero__photo img,
+.js:not(.intro-go) .hero__eyes,
+.js:not(.intro-go) .hero__title,
+.js:not(.intro-go) .hero__title-in,
+.js:not(.intro-go) .hero__lead,
+.js:not(.intro-go) .hero__scroll {
+  animation-play-state: paused;
+}
+
 @keyframes intro-sky {
   from {
     opacity: 0;
