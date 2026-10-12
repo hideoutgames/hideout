@@ -283,15 +283,6 @@ a {
   opacity: 1;
 }
 
-.js .hero__scroll.reveal.is-in {
-  opacity: 0.8;
-}
-
-.js .hero__scroll.reveal.is-in:hover,
-.js .hero__scroll.reveal.is-in:focus-visible {
-  opacity: 1;
-}
-
 @keyframes bob {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(5px); }
@@ -301,6 +292,118 @@ a {
   .hero__scroll svg {
     animation: none;
   }
+}
+
+/* ---------- Intro on page load (CSS only, ~2.5s) ----------------------------
+   1. the night sky fades up from black, settling from a slight zoom
+   2. the eyes appear as a glowing slit, open wide, then blink once
+   3. the title rises from behind its baseline while its letters close up
+   4. the tagline, then the Scroll cue, fade up
+   Every step only fills backwards (holds its start state during its delay),
+   so afterwards the elements are back on their normal styles (hover etc.).
+   Reduced motion: plain fades. */
+
+.hero__title-in {
+  display: inline-block;
+  white-space: nowrap;      /* the wide start spacing must not wrap the line */
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .hero__photo img {
+    animation: intro-sky 2.8s cubic-bezier(0.25, 0.8, 0.25, 1) backwards;
+  }
+  .hero__eyes {
+    animation: intro-eyes 2.1s ease-in-out 0.35s backwards;
+  }
+  .hero__title {
+    animation: intro-title-clip 1.3s 0.85s backwards;
+  }
+  .hero__title-in {
+    animation: intro-title 1.3s var(--ease-out) 0.85s backwards;
+  }
+  .hero__lead {
+    animation: intro-rise 1s var(--ease-out) 1.5s backwards;
+  }
+  .hero__scroll {
+    animation: intro-rise 1s var(--ease-out) 1.95s backwards;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero__photo img,
+  .hero__eyes,
+  .hero__title-in,
+  .hero__lead,
+  .hero__scroll {
+    animation: intro-fade 0.8s ease-out backwards;
+  }
+}
+
+/* Held on the first frame until games.js has the sky photo and the title font
+   ready (it adds .intro-go to <html>; an inline script in the page head adds
+   it after 2s regardless). */
+.js:not(.intro-go) .hero__photo img,
+.js:not(.intro-go) .hero__eyes,
+.js:not(.intro-go) .hero__title,
+.js:not(.intro-go) .hero__title-in,
+.js:not(.intro-go) .hero__lead,
+.js:not(.intro-go) .hero__scroll {
+  animation-play-state: paused;
+}
+
+@keyframes intro-sky {
+  from {
+    opacity: 0;
+    scale: 1.12;
+  }
+}
+
+@keyframes intro-eyes {
+  0% {
+    opacity: 0;
+    scale: 1 0.06;
+    filter: drop-shadow(0 0 0 rgba(255, 254, 239, 0));
+  }
+  22% {
+    opacity: 1;
+    scale: 1 0.06;
+    filter: drop-shadow(0 0 14px rgba(255, 254, 239, 0.9));
+  }
+  42% { scale: 1 1.15; }
+  52% {
+    scale: 1 1;
+    filter: drop-shadow(0 0 8px rgba(255, 254, 239, 0.5));
+  }
+  80% { scale: 1 1; }
+  86% { scale: 1 0.08; }
+  92% { scale: 1 1; }
+  100% {
+    scale: 1 1;
+    filter: drop-shadow(0 0 0 rgba(255, 254, 239, 0));
+  }
+}
+
+/* the title's own box clips the rising text at (just under) its baseline */
+@keyframes intro-title-clip {
+  from, to { clip-path: inset(-1em -1em -0.12em -1em); }
+}
+
+@keyframes intro-title {
+  from {
+    translate: 0 125%;
+    letter-spacing: 0.22em;
+  }
+}
+
+@keyframes intro-rise {
+  from {
+    opacity: 0;
+    translate: 0 12px;
+  }
+}
+
+@keyframes intro-fade {
+  from { opacity: 0; }
 }
 
 /* ==========================================================================
