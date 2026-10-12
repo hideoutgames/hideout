@@ -15,6 +15,15 @@
   }
   Promise.all(waits).then(start);
 
+  // Once the page has loaded, decode its other images too, so the landscape,
+  // screenshots and footer art are ready to paint when scrolled to instead of
+  // decoding (and popping in) as they come into view.
+  window.addEventListener("load", function () {
+    document.querySelectorAll("img").forEach(function (img) {
+      if (img.decode) img.decode().catch(function () {});
+    });
+  });
+
   // Images inside (or being) an element, ready to paint; gives up after `ms`.
   var imagesReady = function (el, ms) {
     var imgs = el.tagName === "IMG" ? [el] : [].slice.call(el.querySelectorAll("img"));
