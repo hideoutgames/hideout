@@ -34,13 +34,15 @@ html {
   overflow-x: clip;         /* nothing may make the page scroll sideways */
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
-  background: var(--cream);
+  /* Never seen directly: every part of the page paints its own background.
+     Black shows only in overscroll and any sub-pixel seams. */
+  background: #000;
   scroll-behavior: smooth;
 }
 
 body {
   margin: 0;
-  background: var(--cream);
+  background: #000;
   color: var(--brand);
   font-family: "Outfit", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   font-weight: 400;
