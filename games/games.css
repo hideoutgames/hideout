@@ -321,10 +321,12 @@ a {
   position: relative;
   z-index: 1;               /* bands paint over the neighbouring hero / footer */
   background: var(--game-bg, transparent);
-  /* 1px less than the band, which overlaps the section by 1px (no hairlines) */
+  /* 3px less than the band: each band overlaps the section by 1px and its
+     neighbour (hero / footer) by 2px, so no hairline can open between them
+     at fractional zoom levels or screen densities. */
   margin-block:
-    calc(var(--game-gap-top, var(--edge)) - 1px)
-    calc(var(--game-gap-bottom, var(--edge)) - 1px);
+    calc(var(--game-gap-top, var(--edge)) - 3px)
+    calc(var(--game-gap-bottom, var(--edge)) - 3px);
 }
 
 .game::before,
@@ -374,7 +376,11 @@ a {
   --game-bg: var(--bb-grass);    /* the sky is painted by .game__wrap */
   /* Top: a pixel-art band that starts at the hero's night colour and dithers
      through dark purple and purple into blue and the day sky. */
-  --game-edge-top: url("boom-bears/sky-in.png") top left / 1024px 480px repeat-x, var(--bb-sky);
+  /* The sky colour sits only under the band's lower part, where the pixels
+     dither out to it; it never peeks through the band's top edge. */
+  --game-edge-top:
+    url("boom-bears/sky-in.png") top left / 1024px 480px repeat-x,
+    var(--bb-sky) left 0 top 320px / 100% calc(100% - 320px) no-repeat;
   --game-mask-top: none;
   --game-edge-top-h: 480px;
   --game-gap-top: 480px;
@@ -584,6 +590,7 @@ a {
    cream page (the section's bottom edge). */
 .bb-landscape {
   position: relative;
+  margin-top: -2px;         /* overlap the sky above: no hairline of grass */
 }
 
 .bb-landscape img {
@@ -641,7 +648,12 @@ a {
   aspect-ratio: 2560 / 1696;
   min-height: 560px;
   overflow: hidden;
+  /* The art's own bottom purple behind its (opaque) lower half: the page can
+     end on a fraction of a pixel, and that last, partly covered pixel row then
+     blends purple into purple instead of showing a dark hairline. */
+  background: linear-gradient(transparent 85%, #6002fb 85%);
 }
+
 
 .footer__art {
   position: absolute;
@@ -683,7 +695,7 @@ a {
 .footer__wordmark {
   position: absolute;
   left: 0;
-  bottom: 0;
+  bottom: -1px;             /* past the stage's (clipped) edge: no gap below */
   width: 100%;
   aspect-ratio: 2560 / 204;
   background: var(--cream);
