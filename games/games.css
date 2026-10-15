@@ -54,6 +54,44 @@ body {
   overflow-x: clip;
 }
 
+/* ---------- Seamless edges on mobile Safari --------------------------------
+   Safari on iPhone paints the areas behind its status bar and toolbar with the
+   background of a fixed element touching the viewport's top / bottom edge.
+   Two such strips, coloured by safari-edges.js from the data-edge colours in
+   the page (it sets --edge-top / --edge-bottom on <html>). iOS WebKit only
+   (-webkit-touch-callout exists nowhere else); other browsers keep the plain
+   black page background. Safari needs at least 5px of a strip visible. */
+.edge {
+  display: none;
+}
+
+@supports (-webkit-touch-callout: none) {
+  html {
+    background: var(--edge-top, #000);
+  }
+  body {
+    background: var(--edge-bottom, #000);
+  }
+  .edge {
+    display: block;
+    position: fixed;
+    left: 0;
+    right: 0;
+    z-index: 2147483000;
+    pointer-events: none;
+  }
+  .edge--top {
+    top: 0;
+    height: max(12px, env(safe-area-inset-top));
+    background: var(--edge-top, #0f0636);
+  }
+  .edge--bottom {
+    bottom: 0;
+    height: max(12px, env(safe-area-inset-bottom));
+    background: var(--edge-bottom, #0f0636);
+  }
+}
+
 /* Elements slide in from the sides (data-reveal="from-left/right"); clip them
    to the page width so they never widen it. Only the x axis, so the sections'
    transition bands can still stick out above and below. */
