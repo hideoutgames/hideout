@@ -26,7 +26,7 @@
   <link rel="preload" as="image" href="img/hero-night-1920.jpg"
         imagesrcset="img/hero-night-1280.jpg 1280w, img/hero-night-1920.jpg 1920w, img/hero-night-2400.jpg 2400w"
         imagesizes="100vw" fetchpriority="high">
-  <link rel="stylesheet" href="games.css?v=7">
+  <link rel="stylesheet" href="games.css?v=8">
   <script>
     // JS is on: scroll reveals and the header intro (held until the sky and
     // the title font are ready; games.js starts it, this is the safety net).
@@ -35,13 +35,18 @@
   </script>
 </head>
 <body>
+  <!-- Mobile Safari paints its status bar / toolbar areas with these fixed
+       strips' colour; safari-edges.js matches them to the page while scrolling
+       (iOS only, see games.css). Keep them direct children of <body>. -->
+  <div class="edge edge--top" aria-hidden="true"></div>
+  <div class="edge edge--bottom" aria-hidden="true"></div>
 
   <!-- ===================================================================
        HERO: eye logo + title over a tinted, scan-lined night sky that fades
        into solid night; the first game's top band picks up from there.
        Photo: Unsplash, photo-1506318137071-a8e063b4bec0 (Unsplash License).
        =================================================================== -->
-  <header class="hero">
+  <header class="hero" data-edge="#0f0636">
     <div class="hero__photo" aria-hidden="true">
       <img src="img/hero-night-1920.jpg"
            srcset="img/hero-night-1280.jpg 1280w, img/hero-night-1920.jpg 1920w, img/hero-night-2400.jpg 2400w"
@@ -75,8 +80,11 @@
          a game, copy this section, change the slug and add a matching
          theme block in games.css.
          ================================================================= -->
-    <section class="game game--boom-bears" id="boom-bears" aria-labelledby="boom-bears-title">
-      <div class="game__wrap">
+    <section class="game game--boom-bears" id="boom-bears" aria-labelledby="boom-bears-title"
+             data-edge="#00e759"
+             data-edge-above="#0f0636 #1b0b52 #2a1478 #33299e #3550c0 #3f86d6 #5cbce2 #86e3e6"
+             data-edge-below="#00e759 #09a345 #136030 #1c1c1c">
+      <div class="game__wrap" data-edge="#9ceee8">
         <div class="bb-intro">
           <img class="bb-logo reveal" data-reveal="pop" src="boom-bears/logo.webp" width="286" height="368" alt="Boom Bears on Stream" decoding="async">
           <div class="bb-copy reveal" data-reveal="rise" style="--i:1">
@@ -107,7 +115,8 @@
         </div>
       </div>
 
-      <div class="bb-landscape" aria-hidden="true">
+      <div class="bb-landscape" aria-hidden="true"
+           data-edge="#a0efe9 #a7e7c8 #abdbc6 #a1cdc0 #aca37b #8e8d58 #49b860 #00e759">
         <img src="boom-bears/landscape.jpg" width="1920" height="620" alt="" decoding="async">
       </div>
     </section>
@@ -119,8 +128,9 @@
        skyline art from the design, eyes baked in; text and the giant
        cut-off HIDEOUT wordmark sit on top.
        =================================================================== -->
-  <footer class="footer">
-    <div class="footer__stage">
+  <footer class="footer" data-edge="#1c1c1c">
+    <div class="footer__stage"
+         data-edge="#1c1c1c #1c1c1c #161028 #342360 #32048b #2f037f #35038d #3d049f #4404b2 #4c05c6 #5406db #5d06ef">
       <img class="footer__art" src="img/footer-skyline-1920.webp"
            srcset="img/footer-skyline-1280.webp 1280w, img/footer-skyline-1920.webp 1920w, img/footer-skyline-2560.webp 2560w"
            sizes="100vw" width="2560" height="1696" alt="" decoding="async">
@@ -132,6 +142,7 @@
     </div>
   </footer>
 
+  <script src="safari-edges.js?v=1" defer></script>
   <script src="games.js?v=4" defer></script>
 </body>
 </html>

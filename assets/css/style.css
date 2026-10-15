@@ -51,6 +51,49 @@ html {
   background: #fbf7ea;
 }
 
+/* ---------- Seamless edges on mobile Safari --------------------------------
+   Safari on iPhone paints the areas behind its status bar and toolbar with the
+   background of a fixed element touching the viewport's top / bottom edge, so
+   two thin strips carry the page's edge colours there: the cream-and-ink cloud
+   dither at the top and the grass dither with the cream wordmark at the
+   bottom, each averaged to one solid colour (Safari can only extend a solid
+   colour). iOS WebKit only (-webkit-touch-callout exists nowhere else).
+   Safari needs at least 5px of a strip visible. */
+:root {
+  --edge-top: #c9c6be;
+  --edge-bottom: #979690;
+}
+
+.edge {
+  display: none;
+}
+
+@supports (-webkit-touch-callout: none) {
+  /* html only: a body background would paint over the cream .bg layer
+     (it sits at z-index -1 in the root stacking context). */
+  html {
+    background: var(--edge-top);
+  }
+  .edge {
+    display: block;
+    position: fixed;
+    left: 0;
+    right: 0;
+    z-index: 2147483000;
+    pointer-events: none;
+  }
+  .edge--top {
+    top: 0;
+    height: max(12px, env(safe-area-inset-top));
+    background: var(--edge-top);
+  }
+  .edge--bottom {
+    bottom: 0;
+    height: max(12px, env(safe-area-inset-bottom));
+    background: var(--edge-bottom);
+  }
+}
+
 body {
   margin: 0;
   font-family: "Onest", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
