@@ -51,64 +51,6 @@ html {
   background: #fbf7ea;
 }
 
-:root {
-  /* the page's cream, at both edges (the dithers are drawn on top of it) */
-  --edge-top: #fbf7ea;
-  --edge-bottom: #fbf7ea;
-}
-
-/* ---------- Seamless edges on mobile Safari --------------------------------
-   Safari on iPhone paints the areas behind its status bar and toolbar with the
-   background of a fixed element touching the viewport's top / bottom edge.
-   Following Josh Puckett's refined version: a 12px solid strip pushed 7px
-   off-screen (Safari needs at least 5px of it visible to pick up the colour),
-   plus (at the top, under the status bar) a 48px fade from that colour into
-   the page, so there is no hard band over the content. The bottom keeps only
-   the 5px strip: a fade there would wash over the giant HIDEOUT wordmark.
-   Both edges use the page's cream.
-   iOS WebKit only (-webkit-touch-callout exists nowhere else). */
-.edge {
-  display: none;
-}
-
-@supports (-webkit-touch-callout: none) {
-  /* html only: a body background would paint over the cream .bg layer
-     (it sits at z-index -1 in the root stacking context). */
-  html {
-    background: var(--edge-top);
-  }
-  .edge {
-    display: block;
-  }
-  .edge--top::before,
-  .edge::after {
-    content: "";
-    position: fixed;
-    left: 0;
-    right: 0;
-    z-index: 2147483000;
-    pointer-events: none;
-  }
-  .edge::after {
-    height: 12px;
-  }
-  .edge--top::before {
-    height: 48px;
-  }
-  .edge--top::after {
-    top: -7px;
-    background: var(--edge-top, #fbf7ea);
-  }
-  .edge--bottom::after {
-    bottom: -7px;
-    background: var(--edge-bottom, #fbf7ea);
-  }
-  .edge--top::before {
-    top: 5px;
-    background: linear-gradient(to bottom, var(--edge-top, #fbf7ea), transparent);
-  }
-}
-
 body {
   margin: 0;
   font-family: "Onest", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
