@@ -57,10 +57,14 @@ body {
 /* ---------- Seamless edges on mobile Safari --------------------------------
    Safari on iPhone paints the areas behind its status bar and toolbar with the
    background of a fixed element touching the viewport's top / bottom edge.
-   Two such strips, coloured by safari-edges.js from the data-edge colours in
-   the page (it sets --edge-top / --edge-bottom on <html>). iOS WebKit only
-   (-webkit-touch-callout exists nowhere else); other browsers keep the plain
-   black page background. Safari needs at least 5px of a strip visible. */
+   Following Josh Puckett's refined version: a 12px solid strip pushed 7px
+   off-screen (Safari needs at least 5px of it visible to pick up the colour),
+   plus (at the top, under the status bar) a 48px fade from that colour into
+   the page, so there is no hard band over the content. The bottom keeps only
+   the 5px strip: a fade there would wash over the giant HIDEOUT wordmark.
+   The colours come from safari-edges.js, which reads the data-edge colours in
+   the page and sets --edge-top / --edge-bottom on <html> while scrolling.
+   iOS WebKit only (-webkit-touch-callout exists nowhere else). */
 .edge {
   display: none;
 }
@@ -74,21 +78,33 @@ body {
   }
   .edge {
     display: block;
+  }
+  .edge--top::before,
+  .edge::after {
+    content: "";
     position: fixed;
     left: 0;
     right: 0;
     z-index: 2147483000;
     pointer-events: none;
   }
-  .edge--top {
-    top: 0;
-    height: max(12px, env(safe-area-inset-top));
+  .edge::after {
+    height: 12px;
+  }
+  .edge--top::before {
+    height: 48px;
+  }
+  .edge--top::after {
+    top: -7px;
     background: var(--edge-top, #0f0636);
   }
-  .edge--bottom {
-    bottom: 0;
-    height: max(12px, env(safe-area-inset-bottom));
+  .edge--bottom::after {
+    bottom: -7px;
     background: var(--edge-bottom, #0f0636);
+  }
+  .edge--top::before {
+    top: 5px;
+    background: linear-gradient(to bottom, var(--edge-top, #0f0636), transparent);
   }
 }
 
